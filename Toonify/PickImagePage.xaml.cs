@@ -71,8 +71,8 @@ namespace Toonify
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)e.OriginalSource;
-            //NavigationService.Navigate(new Uri("/EditImagePage.xaml?name=" + button.CommandParameter, UriKind.Relative));
-            NavigationService.Navigate(new Uri("/StripBackgroundPage.xaml?name=" + button.CommandParameter, UriKind.Relative)); 
+            NavigationService.Navigate(new Uri("/EditImagePage.xaml?name=" + button.CommandParameter, UriKind.Relative));
+            //NavigationService.Navigate(new Uri("/StripBackgroundPage.xaml?name=" + button.CommandParameter, UriKind.Relative)); 
         }
     }
 }

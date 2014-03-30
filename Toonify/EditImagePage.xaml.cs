@@ -18,7 +18,9 @@ namespace Toonify
 {
     public partial class EditImagePage : PhoneApplicationPage
     {
-        private FilterEffect _cartoonEffect = null;
+        private string _filename = string.Empty;
+        private WriteableBitmap _finalImageBitmap = null;
+        private WriteableBitmap _sketchImageBitmap = null;
         private WriteableBitmap _cartoonImageBitmap = null;
         private WriteableBitmap _thumbnailImageBitmap = null;
 
@@ -31,8 +33,8 @@ namespace Toonify
         {
             base.OnNavigatedTo(e);
 
-            var imageName = string.Empty;
-            if (!NavigationContext.QueryString.TryGetValue("name", out imageName)) return; 
+            _filename = string.Empty;
+            if (!NavigationContext.QueryString.TryGetValue("name", out _filename)) return; 
 
             foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
             {
@@ -44,13 +46,13 @@ namespace Toonify
                     {
                         if (album.Name == "Camera Roll")
                         {
-                            var pic = album.Pictures.Where(p => p.Name.Equals(imageName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault(); 
+                            var pic = album.Pictures.Where(p => p.Name.Equals(_filename, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault(); 
                             if (pic != null)
                             {
                                 //BitmapImage b = new BitmapImage();
                                 //b.SetSource(pic.GetImage());
                                 //ImageDisplay.Source = b; 
-                                CreateCartoonImage(pic.GetImage()); 
+                                CreateCartoonImage(pic.GetImage(), pic.Width, pic.Height); 
                             }
                         }
                     }
@@ -58,10 +60,12 @@ namespace Toonify
             }
         }
 
-        private async void CreateCartoonImage(Stream chosenPhoto)
+        private async void CreateCartoonImage(Stream chosenPhoto, int width, int height)
         {
-            _cartoonImageBitmap = new WriteableBitmap((int)ImageDisplay.Width, (int)ImageDisplay.Height);
-            _thumbnailImageBitmap = new WriteableBitmap((int)ImageDisplay.Width, (int)ImageDisplay.Height);
+            _finalImageBitmap = new WriteableBitmap(width, height);
+            _sketchImageBitmap = new WriteableBitmap(width, height);
+            _cartoonImageBitmap = new WriteableBitmap(width, height);
+            _thumbnailImageBitmap = new WriteableBitmap(width, height);
 
             try
             {
@@ -72,26 +76,54 @@ namespace Toonify
                 // Rewind stream to start.                     
                 chosenPhoto.Position = 0;
 
-                // A cartoon effect is initialized with selected image stream as source.
                 var imageStream = new StreamImageSource(chosenPhoto);
-                _cartoonEffect = new FilterEffect(imageStream);
 
-                // Add the cartoon filter as the only filter for the effect.
-                var cartoonFilter = new CartoonFilter();
-                _cartoonEffect.Filters = new[] { cartoonFilter };
+                // A cartoon effect is initialized with selected image stream as source.
+                var sketchEffect = await RenderSketchImage(imageStream);
+                var cartoonEffect = await RenderCartoonImage(imageStream);
+                await RenderFinalImage(sketchEffect, cartoonEffect);
 
-                // Render the image to a WriteableBitmap.
-                var renderer = new WriteableBitmapRenderer(_cartoonEffect, _thumbnailImageBitmap);
-                _cartoonImageBitmap = await renderer.RenderAsync();
+                ImageDisplay.Source = _finalImageBitmap;
+                SketchDisplay.Source = _sketchImageBitmap;
+                CartoonDisplay.Source = _cartoonImageBitmap;
 
-                // Set the rendered image as source for the cartoon image control.
-                ImageDisplay.Source = _cartoonImageBitmap;
+                //save resulting image
+                //_cartoonImageBitmap.SaveToMediaLibrary("toonify_" + _filename); 
             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message);
                 return;
             }
+        }
+
+        private async System.Threading.Tasks.Task RenderFinalImage(FilterEffect sketchEffect, FilterEffect cartoonEffect)
+        {
+            var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Add);
+            var blendEffect = new FilterEffect(cartoonEffect);
+            blendEffect.Filters = new[] { blendFilter };
+            var finalRenderer = new WriteableBitmapRenderer(blendEffect, _finalImageBitmap);
+            await finalRenderer.RenderAsync();
+        }
+
+        private async System.Threading.Tasks.Task<FilterEffect> RenderSketchImage(StreamImageSource imageStream)
+        {
+            var sketchFilter = new SketchFilter(SketchMode.Gray);
+            var sketchEffect = new FilterEffect(imageStream);
+            sketchEffect.Filters = new[] { sketchFilter };
+            var sketchRenderer = new WriteableBitmapRenderer(sketchEffect, _sketchImageBitmap);
+            await sketchRenderer.RenderAsync();
+            return sketchEffect;
+        }
+
+        private async System.Threading.Tasks.Task<FilterEffect> RenderCartoonImage(StreamImageSource imageStream)
+        {
+            var cartoonEffect = new FilterEffect(imageStream);
+            var cartoonFilter = new CartoonFilter();
+            cartoonEffect.Filters = new[] { cartoonFilter };
+            var cartoonRenderer = new WriteableBitmapRenderer(cartoonEffect, _cartoonImageBitmap);
+            await cartoonRenderer.RenderAsync();
+            return cartoonEffect; 
         }
     }
 }
