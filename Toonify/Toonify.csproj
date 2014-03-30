@@ -88,6 +88,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StripBackgroundPage.xaml.cs">
+      <DependentUpon>StripBackgroundPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\PickImageViewModel.cs" />
     <Compile Include="ViewModels\PageItemViewModel.cs" />
     <Compile Include="ViewModels\ImageItemViewModel.cs" />
@@ -111,6 +114,10 @@
       <SubType>Designer</SubType>
     </DesignData>
     <Page Include="PickImagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StripBackgroundPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
