@@ -19,6 +19,9 @@ namespace Toonify
 {
     public partial class EditImagePage : PhoneApplicationPage
     {
+        private const int DefaultWidth = 768;
+        private const int DefaultHeight = 1000;
+
         private string _filename = string.Empty;
         private WriteableBitmap _finalImageBitmap = null;
         private WriteableBitmap _sketchImageBitmap = null;
@@ -50,9 +53,6 @@ namespace Toonify
                             var pic = album.Pictures.Where(p => p.Name.Equals(_filename, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault(); 
                             if (pic != null)
                             {
-                                //BitmapImage b = new BitmapImage();
-                                //b.SetSource(pic.GetImage());
-                                //ImageDisplay.Source = b; 
                                 CreateCartoonImage(pic.GetImage(), pic.Width, pic.Height); 
                             }
                         }
@@ -62,17 +62,38 @@ namespace Toonify
         }
 
         private async void CreateCartoonImage(Stream chosenPhoto, int width, int height)
-        {
-            _finalImageBitmap = new WriteableBitmap(width, height);
-            _sketchImageBitmap = new WriteableBitmap(width, height);
-            _cartoonImageBitmap = new WriteableBitmap(width, height);
-            _thumbnailImageBitmap = new WriteableBitmap(width, height);
-
+        {   
             try
             {
+                var originalImage = new WriteableBitmap(width, height);
+
+                var selectedImageWidth = DefaultWidth;
+                var selectedImageHeight = DefaultHeight;
+                var aspectRatioOriginal = (double)width / (double)height;
+                var aspectRatioImport = (double)DefaultWidth / (double)DefaultHeight;
+                if (aspectRatioImport < aspectRatioOriginal)
+                {
+                    var zoom = (double)height / (double)DefaultHeight;
+                    selectedImageWidth = (int)(width / zoom);
+                }
+                else
+                {
+                    var zoom = (double)width / (double)DefaultWidth;
+                    selectedImageHeight = (int)(height / zoom);
+                }
+
+                _finalImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                _sketchImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                _cartoonImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                _thumbnailImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+
+                _thumbnailImageBitmap.Blit(new Rect(0, 0, selectedImageWidth, selectedImageHeight),
+                                originalImage,
+                                new Rect(0, 0, width, height));
+
                 // Show thumbnail of original image.
-                _thumbnailImageBitmap.SetSource(chosenPhoto);
-                //ImageDisplay.Source = _thumbnailImageBitmap;
+                //_thumbnailImageBitmap.SetSource(chosenPhoto);
+                OriginalDisplay.Source = _thumbnailImageBitmap;
 
                 // Rewind stream to start.                     
                 chosenPhoto.Position = 0;
@@ -91,12 +112,17 @@ namespace Toonify
                 //save resulting image
                 //_cartoonImageBitmap.SaveToMediaLibrary("toonify_" + _filename); 
 
-                LoadingPanel.Visibility = System.Windows.Visibility.Collapsed; 
+                LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
             }
-            catch (Exception exception)
+            catch (OutOfMemoryException)
             {
-                //MessageBox.Show(exception.Message);
-                LoadingMessage.Text = "Error, please try another image";
+                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                NavigateBackToHomeScreen();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                NavigationService.GoBack(); 
             }
         }
 
@@ -133,19 +159,31 @@ namespace Toonify
         private void CombinedButton_Click(object sender, RoutedEventArgs e)
         {
             SaveImage(_cartoonImageBitmap);
-            NavigationService.GoBack();
+            NavigateBackToHomeScreen(); 
         }
 
         private void SketchButton_Click(object sender, RoutedEventArgs e)
         {
             SaveImage(_sketchImageBitmap);
-            NavigationService.GoBack(); 
+            NavigateBackToHomeScreen(); 
         }
 
         private void CartoonButton_Click(object sender, RoutedEventArgs e)
         {
             SaveImage(_finalImageBitmap);
-            NavigationService.GoBack();
+            NavigateBackToHomeScreen(); 
+        }
+
+        private void OriginalButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveImage(_thumbnailImageBitmap);
+            NavigateBackToHomeScreen();
+        }
+
+        private void NavigateBackToHomeScreen()
+        {
+            NavigationService.RemoveBackEntry();
+            NavigationService.GoBack(); 
         }
 
         private void SaveImage(WriteableBitmap bitmap)
