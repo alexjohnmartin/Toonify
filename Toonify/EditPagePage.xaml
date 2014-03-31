@@ -28,7 +28,47 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Image Name="PageImage" Tap="PageImage_Tap"/>
+            <Grid x:Name="PageLayoutPanel" Grid.Row="1" Margin="12,0,12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="200"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="220"/>
+                </Grid.ColumnDefinitions>
+
+                <Button CommandParameter="Single" Grid.Row="0" Grid.Column="0" Click="LayoutButton_Click">
+                    <Image Source="Assets/PageLayouts/Single.png"/>
+                </Button>
+                <Button CommandParameter="DoubleSimple" Grid.Row="0" Grid.Column="1" Click="LayoutButton_Click">
+                    <Image Source="Assets/PageLayouts/DoubleSimple.png"/>
+                </Button>
+                <Button CommandParameter="TripleSimple" Grid.Row="1" Grid.Column="0" Click="LayoutButton_Click">
+                    <Image Source="Assets/PageLayouts/TripleSimple.png"/>
+                </Button>
+                <Button CommandParameter="FourSimple" Grid.Row="1" Grid.Column="1" Click="LayoutButton_Click">
+                    <Image Source="Assets/PageLayouts/FourSimple.png"/>
+                </Button>
+            </Grid>
+
+            <Image Name="PageImage" Tap="PageImage_Tap" Visibility="Collapsed"/>
+
+            <Grid Name="TextDialog" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Visibility="Collapsed">
+                <Rectangle Fill="Gray"></Rectangle>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Enter text for speech bubble" Margin="12, 6, 0, 0"/>
+                    <TextBox Name="SpeechBubbleTextbox"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Name="SpeechOkButton" Click="SpeechOkButton_Click">
+                            <TextBlock Text="ok"/>
+                        </Button>
+                        <Button Name="SpeechCancelButton" Click="SpeechCancelButton_Click">
+                            <TextBlock Text="cancel"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 

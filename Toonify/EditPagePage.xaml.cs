@@ -22,18 +22,21 @@ namespace Toonify
         private const int DefaultWidth = 768;
         private const int DefaultHeight = 1000;
         private const int DefaultPageMargin = 20;
-        
+        private const int DefaultFontsize = 20;
+
         private int top = 0;
         private int left = 0;
         private int width = 0;
         private int height = 0;
         private PageLayout _layout;
         private WriteableBitmap _pageImage;
+        private bool _addSpeechBubble = false; 
         private string _pageFileName = string.Empty;
 
         public EditPagePage()
         {
             InitializeComponent();
+            ApplicationBar = new ApplicationBar(); 
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -46,22 +49,22 @@ namespace Toonify
             if (!string.IsNullOrEmpty(App.ViewModel.SelectedImageName))
             {
                 AddImageToPage(App.ViewModel.SelectedImageName);
-                _pageFileName = GeneratePageFileName();
                 SavePage();
+                BuildApplicationBar(); 
             }
             else if (newPage.Equals("true", StringComparison.InvariantCultureIgnoreCase))
             {
-                var layout = string.Empty;
-                NavigationContext.QueryString.TryGetValue("layout", out layout);
-                _layout = ParseLayoutString(layout); 
-
-                //start new page
+                PageLayoutPanel.Visibility = System.Windows.Visibility.Visible;
+                PageImage.Visibility = System.Windows.Visibility.Collapsed;
+                TextDialog.Visibility = System.Windows.Visibility.Collapsed;
+                _pageFileName = string.Empty;
                 _pageImage = new WriteableBitmap(DefaultWidth, DefaultHeight);
-                DrawBlankPage();
+                _addSpeechBubble = false; 
             }
             else
             {
                 //load previously made page
+                BuildApplicationBar(); 
                 MessageBox.Show("cannot edit an existing page yet", "Error", MessageBoxButton.OK);
                 NavigationService.GoBack();
                 return; 
@@ -70,8 +73,30 @@ namespace Toonify
             PageImage.Source = _pageImage; 
         }
 
+        private void BuildApplicationBar()
+        {
+            ApplicationBar = new ApplicationBar();
+
+            // Create a new button and set the text value to the localized string from MeetMeHere.Support.MeetMeHereResources.
+            var addSpeechButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.chat.png", UriKind.Relative));
+            addSpeechButton.Text = "add speech bubble"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            addSpeechButton.Click += AddSpeech_Click;
+            ApplicationBar.Buttons.Add(addSpeechButton);
+        }
+
+        private void AddSpeech_Click(object sender, EventArgs e)
+        {
+            _addSpeechBubble = true;
+            MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
+        }
+
         private void SavePage()
         {
+            using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (iso.FileExists(_pageFileName))
+                    iso.DeleteFile(_pageFileName); 
+            }
             using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 using (IsolatedStorageFileStream isostream = iso.CreateFile(_pageFileName))
@@ -81,15 +106,11 @@ namespace Toonify
                 }
             }
 
-            var imageInStore = App.ViewModel.PageItems.FirstOrDefault(p => p.Name.Equals(_pageImage));
+            var imageInStore = App.ViewModel.PageItems.FirstOrDefault(p => p.Name.Equals(_pageFileName));
             if (imageInStore == null)
-            {
                 App.ViewModel.PageItems.Add(new ImageItem { Name = _pageFileName, Image = _pageImage });
-            }
             else
-            {
                 imageInStore.Image = _pageImage; 
-            }
         }
 
         private string GeneratePageFileName()
@@ -127,29 +148,47 @@ namespace Toonify
 
         private void PageImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            //get which panel has been tapped
             var tapPosition = e.GetPosition(PageImage);
-            switch(_layout)
-            {
-                case PageLayout.Single:
-                    top = DefaultPageMargin;
-                    left = DefaultPageMargin;
-                    width = DefaultWidth - (2 * DefaultPageMargin); 
-                    height = DefaultHeight- (2 * DefaultPageMargin);
-                    break;
-                default:
-                    MessageBox.Show("cannot add to this page layout yet", "Error", MessageBoxButton.OK);
-                    NavigationService.GoBack();
-                    break;
-            }
 
-            //show image selector
-            App.ViewModel.SelectedImageName = string.Empty; 
-            NavigationService.Navigate(new Uri(
-                                            string.Format("/PickImagePage.xaml?new=true&top={0}&left={1}&width={2}&height={3}&layout={4}",
-                                                top, left, width, height, _layout), 
-                                            UriKind.Relative
-                                        )); 
+            if (_addSpeechBubble)
+            {
+                top = (int)tapPosition.Y;
+                left = (int)tapPosition.X;
+                width = 0;
+                height = 0;
+                ShowTextInputBox(); 
+            }
+            else
+            {
+                //get which panel has been tapped
+                switch (_layout)
+                {
+                    case PageLayout.Single:
+                        top = DefaultPageMargin;
+                        left = DefaultPageMargin;
+                        width = DefaultWidth - (2 * DefaultPageMargin);
+                        height = DefaultHeight - (2 * DefaultPageMargin);
+                        break;
+                    default:
+                        MessageBox.Show("cannot add to this page layout yet", "Error", MessageBoxButton.OK);
+                        NavigationService.GoBack();
+                        break;
+                }
+
+                //show image selector
+                App.ViewModel.SelectedImageName = string.Empty;
+                NavigationService.Navigate(new Uri(
+                                                string.Format("/PickImagePage.xaml?new=true&top={0}&left={1}&width={2}&height={3}&layout={4}",
+                                                    top, left, width, height, _layout),
+                                                UriKind.Relative
+                                            ));
+            }
+        }
+
+        private void ShowTextInputBox()
+        {
+            SpeechBubbleTextbox.Text = string.Empty; 
+            TextDialog.Visibility = System.Windows.Visibility.Visible; 
         }
 
         private PageLayout ParseLayoutString(string layout)
@@ -222,6 +261,75 @@ namespace Toonify
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK);               
             } 
+        }
+
+        private void SpeechOkButton_Click(object sender, RoutedEventArgs e)
+        {
+            TextDialog.Visibility = System.Windows.Visibility.Collapsed;
+            DrawSpeechBubble();
+            SavePage(); 
+        }
+
+        private void DrawSpeechBubble()
+        {
+            var zoom = 0d; 
+            var aspectRatioOriginal = (double)width / (double)height;
+            var aspectRatioImport = (double)_pageImage.PixelWidth / (double)_pageImage.PixelHeight;
+            if (aspectRatioImport > aspectRatioOriginal)
+                zoom = (double)_pageImage.PixelHeight / (double)PageImage.ActualHeight;
+            else
+                zoom = (double)_pageImage.PixelWidth / (double)PageImage.ActualWidth;
+            
+            var textWidth = TextWidth(SpeechBubbleTextbox.Text);
+            _pageImage.FillEllipseCentered((int)(left * zoom), (int)(top * zoom), (textWidth / 2) + 20, textWidth / 4, Colors.Black);
+            _pageImage.FillEllipseCentered((int)(left * zoom), (int)(top * zoom), (textWidth / 2) + 18, textWidth / 4 - 2, Colors.White);
+            _pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, (int)((left - (textWidth / 2)) * zoom), (int)(top - (DefaultFontsize / 2) * zoom));
+            _pageImage.Invalidate(); 
+        }
+
+        public int TextWidth(string text)
+        {
+            TextBlock t = new TextBlock();
+            t.Text = text;
+            //t.FontFamily = ...
+            t.FontSize = DefaultFontsize; 
+            t.FontWeight = FontWeights.ExtraBold;
+            return (int)Math.Ceiling(t.ActualWidth);
+        }
+
+        private void SpeechCancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            TextDialog.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void LayoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)e.OriginalSource;
+            _layout = ParseLayoutString(button.CommandParameter.ToString());
+            PageLayoutPanel.Visibility = System.Windows.Visibility.Collapsed;
+            PageImage.Visibility = System.Windows.Visibility.Visible;
+
+            //start new page
+            _pageFileName = GeneratePageFileName();
+            DrawBlankPage();
+        }
+    }
+
+    internal static class WritableBitmapExtensions
+    {
+        internal static void DrawText(this WriteableBitmap wbm, string text, Color color, int fontSize, int x, int y)
+        {
+            TextBlock tb = new TextBlock();
+            tb.FontSize = fontSize;
+            tb.FontWeight = FontWeights.ExtraBold;
+            tb.Foreground = new SolidColorBrush(color);
+            tb.Text = text;
+
+            // TranslateTransform 
+            TranslateTransform tf = new TranslateTransform();
+            tf.X = x;
+            tf.Y = y;
+            wbm.Render(tb, tf);
         }
     }
 }

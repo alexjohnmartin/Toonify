@@ -42,7 +42,7 @@ namespace Toonify
 
         private void NewPage_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/PickLayoutPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/EditPagePage.xaml?new=true", UriKind.Relative));
         }
 
         public void TwitterButton_Click(object sender, EventArgs e)

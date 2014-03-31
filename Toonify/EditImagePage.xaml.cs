@@ -132,13 +132,13 @@ namespace Toonify
 
         private void CombinedButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveImage(_finalImageBitmap);
+            SaveImage(_cartoonImageBitmap);
             NavigationService.GoBack();
         }
 
         private void SketchButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveImage(_finalImageBitmap);
+            SaveImage(_sketchImageBitmap);
             NavigationService.GoBack(); 
         }
 
@@ -153,10 +153,10 @@ namespace Toonify
             var fileStream = new MemoryStream();
             bitmap.SaveJpeg(fileStream, bitmap.PixelWidth, bitmap.PixelHeight, 100, 100);
             fileStream.Seek(0, SeekOrigin.Begin); 
-
+            
+            var filename = "image_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg"; 
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                var filename = "image_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg"; 
                 var stream = store.CreateFile(filename);
 
                 var reader = new StreamReader(fileStream);
@@ -168,6 +168,8 @@ namespace Toonify
                 stream.Write(contents, 0, contents.Length);
                 stream.Close();
             }
+
+            App.ViewModel.ImageItems.Add(new ImageItem { Name = filename, Image = bitmap }); 
         }
     }
 }

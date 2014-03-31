@@ -34,9 +34,9 @@
                 <RowDefinition Height="230"/>
             </Grid.RowDefinitions>
 
-            <Button Name="CartoonButton" Click="CartoonButton_Click"><Image Name="CartoonDisplay" Grid.Row="0"/></Button>
-            <Button Name="SketchButton" Click="SketchButton_Click"><Image Name="SketchDisplay" Grid.Row="1"/></Button>
-            <Button Name="CombinedButton" Click="CombinedButton_Click"><Image Name="ImageDisplay" Grid.Row="2"/></Button>
+            <Button Name="CartoonButton" Click="CartoonButton_Click" Grid.Row="0"><Image Name="CartoonDisplay"/></Button>
+            <Button Name="SketchButton" Click="SketchButton_Click" Grid.Row="1"><Image Name="SketchDisplay"/></Button>
+            <Button Name="CombinedButton" Click="CombinedButton_Click" Grid.Row="2"><Image Name="ImageDisplay"/></Button>
 
             <Grid Grid.Row="1" Name="LoadingPanel">
                 <Rectangle Fill="Gray" Height="100" Width="400"/>

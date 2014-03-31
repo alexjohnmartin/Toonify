@@ -90,9 +90,6 @@
     <Compile Include="PickImagePage.xaml.cs">
       <DependentUpon>PickImagePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PickLayoutPage.xaml.cs">
-      <DependentUpon>PickLayoutPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -136,10 +133,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PickLayoutPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="StripBackgroundPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -155,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\PanoramaBackground.png" />
-    <Content Include="Assets\About\appbar.chat.png" />
+    <Content Include="Assets\AppBar\appbar.chat.png" />
     <Content Include="Assets\About\appbar.companioncube.png" />
     <Content Include="Assets\About\appbar.email.png" />
     <Content Include="Assets\About\appbar.marketplace.png" />
