@@ -182,7 +182,10 @@ namespace Toonify
 
         private void NavigateBackToHomeScreen()
         {
-            NavigationService.RemoveBackEntry();
+            var lastStackItem = NavigationService.BackStack.FirstOrDefault(); 
+            if (lastStackItem.Source.OriginalString.Contains("ImportImagePage.xaml"))
+                NavigationService.RemoveBackEntry();
+
             NavigationService.GoBack(); 
         }
 

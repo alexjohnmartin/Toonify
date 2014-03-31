@@ -13,6 +13,8 @@ namespace Toonify
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        CameraCaptureTask cameraCaptureTask = new CameraCaptureTask();
+
         // Constructor
         public MainPage()
         {
@@ -20,6 +22,8 @@ namespace Toonify
 
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
+
+            cameraCaptureTask.Completed += new EventHandler<PhotoResult>(cameraCaptureTask_Completed);
         }
 
         // Load data for the ViewModel Items
@@ -30,9 +34,20 @@ namespace Toonify
                 App.ViewModel.LoadData();
             }
         }
+        
+        protected void cameraCaptureTask_Completed(object sender, PhotoResult e)
+        {
+            if (e.TaskResult == TaskResult.OK)
+            {
+                var fullPath = e.OriginalFileName;
+                var filename = fullPath.Contains('\\') ? fullPath.Substring(fullPath.LastIndexOf('\\') + 1) : fullPath; 
+                NavigationService.Navigate(new Uri("/EditImagePage.xaml?name=" + filename, UriKind.Relative));
+            }
+        }
 
         private void TakePhotoButton_Click(object sender, RoutedEventArgs e)
         {
+            cameraCaptureTask.Show(); 
         }
 
         private void ImportImageButton_Click(object sender, RoutedEventArgs e)

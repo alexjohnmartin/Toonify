@@ -30,9 +30,9 @@
                         <Button Name="ImportImageButton" Click="ImportImageButton_Click">
                             <TextBlock Text="Import image"/>
                         </Button>
-                        <!--<Button Name="TakePhotoButton" Click="TakePhotoButton_Click">
+                        <Button Name="TakePhotoButton" Click="TakePhotoButton_Click">
                             <TextBlock Text="Take photo"/>
-                        </Button>-->
+                        </Button>
                     </StackPanel>
                     
                     <!--Single line list with text wrapping-->
