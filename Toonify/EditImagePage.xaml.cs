@@ -65,7 +65,12 @@ namespace Toonify
         {   
             try
             {
-                var originalImage = new WriteableBitmap(width, height);
+                // Rewind stream to start.                     
+                chosenPhoto.Position = 0;
+                var imageStream = new StreamImageSource(chosenPhoto);
+
+                //var originalImage = new WriteableBitmap(width, height);
+                //originalImage.SetSource(chosenPhoto); 
 
                 var selectedImageWidth = DefaultWidth;
                 var selectedImageHeight = DefaultHeight;
@@ -82,32 +87,24 @@ namespace Toonify
                     selectedImageHeight = (int)(height / zoom);
                 }
 
-                _finalImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
-                _sketchImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                //_finalImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                //_sketchImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
                 _cartoonImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
-                _thumbnailImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                //_thumbnailImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
 
-                _thumbnailImageBitmap.Blit(new Rect(0, 0, selectedImageWidth, selectedImageHeight),
-                                originalImage,
-                                new Rect(0, 0, width, height));
-
-                // Show thumbnail of original image.
-                //_thumbnailImageBitmap.SetSource(chosenPhoto);
-                OriginalDisplay.Source = _thumbnailImageBitmap;
-
-                // Rewind stream to start.                     
-                chosenPhoto.Position = 0;
-
-                var imageStream = new StreamImageSource(chosenPhoto);
+                //_thumbnailImageBitmap.Blit(new Rect(0, 0, selectedImageWidth, selectedImageHeight),
+                //                originalImage,
+                //                new Rect(0, 0, width, height));
 
                 // A cartoon effect is initialized with selected image stream as source.
-                var sketchEffect = await RenderSketchImage(imageStream);
+                //var sketchEffect = await RenderSketchImage(imageStream);
                 var cartoonEffect = await RenderCartoonImage(imageStream);
-                await RenderFinalImage(sketchEffect, cartoonEffect);
+                //await RenderFinalImage(sketchEffect, cartoonEffect);
 
-                ImageDisplay.Source = _finalImageBitmap;
-                SketchDisplay.Source = _sketchImageBitmap;
+                //ImageDisplay.Source = _finalImageBitmap;
+                //SketchDisplay.Source = _sketchImageBitmap;
                 CartoonDisplay.Source = _cartoonImageBitmap;
+                //OriginalDisplay.Source = _thumbnailImageBitmap;
 
                 //save resulting image
                 //_cartoonImageBitmap.SaveToMediaLibrary("toonify_" + _filename); 
@@ -126,25 +123,25 @@ namespace Toonify
             }
         }
 
-        private async System.Threading.Tasks.Task RenderFinalImage(FilterEffect sketchEffect, FilterEffect cartoonEffect)
-        {
-            var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Multiply);
-            var blendEffect = new FilterEffect(cartoonEffect);
-            blendEffect.Filters = new[] { blendFilter };
-            var finalRenderer = new WriteableBitmapRenderer(blendEffect, _finalImageBitmap);
-            await finalRenderer.RenderAsync();
-        }
+        //private async System.Threading.Tasks.Task RenderFinalImage(FilterEffect sketchEffect, FilterEffect cartoonEffect)
+        //{
+        //    var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Multiply);
+        //    var blendEffect = new FilterEffect(cartoonEffect);
+        //    blendEffect.Filters = new[] { blendFilter };
+        //    var finalRenderer = new WriteableBitmapRenderer(blendEffect, _finalImageBitmap);
+        //    await finalRenderer.RenderAsync();
+        //}
 
-        private async System.Threading.Tasks.Task<FilterEffect> RenderSketchImage(StreamImageSource imageStream)
-        {
-            //var sketchFilter = new SketchFilter(SketchMode.Gray);
-            var sketchFilter = new StampFilter(5, 0.5); 
-            var sketchEffect = new FilterEffect(imageStream);
-            sketchEffect.Filters = new[] { sketchFilter };
-            var sketchRenderer = new WriteableBitmapRenderer(sketchEffect, _sketchImageBitmap);
-            await sketchRenderer.RenderAsync();
-            return sketchEffect;
-        }
+        //private async System.Threading.Tasks.Task<FilterEffect> RenderSketchImage(StreamImageSource imageStream)
+        //{
+        //    //var sketchFilter = new SketchFilter(SketchMode.Gray);
+        //    var sketchFilter = new StampFilter(5, 0.5); 
+        //    var sketchEffect = new FilterEffect(imageStream);
+        //    sketchEffect.Filters = new[] { sketchFilter };
+        //    var sketchRenderer = new WriteableBitmapRenderer(sketchEffect, _sketchImageBitmap);
+        //    await sketchRenderer.RenderAsync();
+        //    return sketchEffect;
+        //}
 
         private async System.Threading.Tasks.Task<FilterEffect> RenderCartoonImage(StreamImageSource imageStream)
         {
@@ -156,17 +153,17 @@ namespace Toonify
             return cartoonEffect; 
         }
 
-        private void CombinedButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveImage(_cartoonImageBitmap);
-            NavigateBackToHomeScreen(); 
-        }
+        //private void CombinedButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SaveImage(_cartoonImageBitmap);
+        //    NavigateBackToHomeScreen(); 
+        //}
 
-        private void SketchButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveImage(_sketchImageBitmap);
-            NavigateBackToHomeScreen(); 
-        }
+        //private void SketchButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SaveImage(_sketchImageBitmap);
+        //    NavigateBackToHomeScreen(); 
+        //}
 
         private void CartoonButton_Click(object sender, RoutedEventArgs e)
         {
@@ -211,6 +208,17 @@ namespace Toonify
             }
 
             App.ViewModel.ImageItems.Add(new ImageItem { Name = filename, Image = bitmap }); 
+        }
+
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveImage(_cartoonImageBitmap);
+            NavigateBackToHomeScreen();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateBackToHomeScreen();
         }
     }
 }
