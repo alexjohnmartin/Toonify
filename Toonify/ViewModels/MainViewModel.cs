@@ -95,35 +95,6 @@ namespace Toonify.ViewModels
                 }
             }
 
-            //PictureAlbum cameraRoll = null;
-            //foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
-            //{
-            //    if (source.MediaSourceType == MediaSourceType.LocalDevice)
-            //    {
-            //        var mediaLibrary = new MediaLibrary(source);
-            //        PictureAlbumCollection allAlbums = mediaLibrary.RootPictureAlbum.Albums;
-            //        foreach (PictureAlbum album in allAlbums)
-            //        {
-            //            if (album.Name == "Camera Roll")
-            //            {
-            //                cameraRoll = album;
-            //            }
-            //        }
-            //    }
-            //}
-
-            //if (cameraRoll != null)
-            //{
-            //    //List<BitmapImage> lstBitmapImage = new List<BitmapImage>();
-            //    foreach (Picture p in cameraRoll.Pictures)
-            //    {
-            //        BitmapImage b = new BitmapImage();
-            //        b.SetSource(p.GetThumbnail());
-            //        //lstBitmapImage.Add(b);
-            //        MediaLibraryItems.Add(new ImageItemViewModel { Filename = p.Name, ImageUri = "test" });
-            //    }
-            //}
-
             this.IsDataLoaded = true;
         }
 
