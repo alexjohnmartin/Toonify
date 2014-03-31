@@ -168,9 +168,25 @@ namespace Toonify
                 case PageLayout.DoubleSimple:
                     DrawBlankDoublePage();
                     break;
+                case PageLayout.TripleSimple:
+                    DrawBlankTriplePage();
+                    break; 
                 default:
                     throw new NotImplementedException(); 
             }
+        }
+
+        private void DrawBlankTriplePage()
+        {
+            var centreX = DefaultWidth / 2;
+            var thirdHeight = DefaultHeight / 3; 
+            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, thirdHeight - DefaultPageMargin / 2, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin, thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - thirdHeight - DefaultPageMargin/2, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            DrawAddIcon(centreX, thirdHeight / 2);
+            DrawAddIcon(centreX, thirdHeight + (thirdHeight / 2));
+            DrawAddIcon(centreX, thirdHeight*2 + (thirdHeight / 2));
         }
 
         private void DrawBlankDoublePage()
@@ -226,11 +242,22 @@ namespace Toonify
                     case PageLayout.DoubleSimple:
                         left = DefaultPageMargin;
                         width = DefaultWidth - (2 * DefaultPageMargin);
-                        height = (DefaultHeight - (2 * DefaultPageMargin)) / 2;
+                        height = (DefaultHeight - (3 * DefaultPageMargin)) / 2;
                         if (tapPosition.Y < PageImage.ActualHeight / 2)
                             top = DefaultPageMargin;
                         else
-                            top = (DefaultPageMargin/2) + (DefaultHeight/2);
+                            top = (DefaultPageMargin*2) + (height);
+                        break;
+                    case PageLayout.TripleSimple:
+                        left = DefaultPageMargin;
+                        width = DefaultWidth - (2 * DefaultPageMargin);
+                        height = (DefaultHeight - (4 * DefaultPageMargin)) / 3;
+                        if (tapPosition.Y < PageImage.ActualHeight / 3)
+                            top = DefaultPageMargin;
+                        else if (tapPosition.Y < (PageImage.ActualHeight / 3) * 2)
+                            top = (DefaultPageMargin*2) + (height);
+                        else
+                            top = (DefaultPageMargin*3) + (height * 2);
                         break; 
                     default:
                         MessageBox.Show("cannot add to this page layout yet", "Error", MessageBoxButton.OK);
