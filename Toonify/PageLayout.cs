@@ -7,9 +7,10 @@ namespace Toonify
 {
     internal enum PageLayout
     {
-        Single = 0, 
-        DoubleSimple, 
-        TripleSimple, 
-        FourSimple, 
+        Unknown = 0, 
+        Single = 1, 
+        DoubleSimple = 2, 
+        TripleSimple = 3, 
+        FourSimple = 4, 
     }
 }

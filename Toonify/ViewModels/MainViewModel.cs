@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using Toonify.Resources;
@@ -73,7 +74,10 @@ namespace Toonify.ViewModels
                 foreach (var file in store.GetFileNames("image_*"))
                 {
                     var bitmap = new BitmapImage();
-                    bitmap.SetSource(store.OpenFile(file, System.IO.FileMode.Open));
+                    using (var stream = store.OpenFile(file, FileMode.Open, FileAccess.Read))
+                    {
+                        bitmap.SetSource(stream);
+                    }
                     ImageItems.Add(new ImageItem { Name = file, Image = new WriteableBitmap(bitmap) });
                 }
             }
@@ -83,7 +87,10 @@ namespace Toonify.ViewModels
                 foreach (var file in store.GetFileNames("page_*"))
                 {
                     var bitmap = new BitmapImage();
-                    bitmap.SetSource(store.OpenFile(file, System.IO.FileMode.Open));
+                    using (var stream = store.OpenFile(file, FileMode.Open, FileAccess.Read))
+                    {
+                        bitmap.SetSource(stream);
+                    }
                     PageItems.Add(new ImageItem { Name = file, Image = new WriteableBitmap(bitmap) });
                 }
             }

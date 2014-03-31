@@ -43,16 +43,17 @@ namespace Toonify
         {
             base.OnNavigatedTo(e);
 
-            var newPage = string.Empty; 
-            NavigationContext.QueryString.TryGetValue("new", out newPage);
+            var dummy = string.Empty; 
+            var newPage = NavigationContext.QueryString.TryGetValue("new", out dummy);
 
             if (!string.IsNullOrEmpty(App.ViewModel.SelectedImageName))
             {
                 AddImageToPage(App.ViewModel.SelectedImageName);
                 SavePage();
-                BuildApplicationBar(); 
+                BuildApplicationBar();
+                App.ViewModel.SelectedImageName = string.Empty; 
             }
-            else if (newPage.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            else if (newPage)
             {
                 PageLayoutPanel.Visibility = System.Windows.Visibility.Visible;
                 PageImage.Visibility = System.Windows.Visibility.Collapsed;
@@ -61,16 +62,55 @@ namespace Toonify
                 _pageImage = new WriteableBitmap(DefaultWidth, DefaultHeight);
                 _addSpeechBubble = false; 
             }
-            else
+            else if (NavigationContext.QueryString.TryGetValue("edit", out _pageFileName))
             {
                 //load previously made page
-                BuildApplicationBar(); 
-                MessageBox.Show("cannot edit an existing page yet", "Error", MessageBoxButton.OK);
-                NavigationService.GoBack();
-                return; 
+                BuildApplicationBar();
+
+                //get layout-type from file name
+                var parts = _pageFileName.Split('_');
+                _layout = (PageLayout)Enum.Parse(typeof(PageLayout), parts[1]); 
+
+                LoadImageFromIsolatedStorage(); 
+
+                PageLayoutPanel.Visibility = System.Windows.Visibility.Collapsed;
+                PageImage.Visibility = System.Windows.Visibility.Visible;
+                TextDialog.Visibility = System.Windows.Visibility.Collapsed;
+                _addSpeechBubble = false;
+                PageImage.Source = _pageImage; 
             }
 
             PageImage.Source = _pageImage; 
+        }
+
+        private void LoadImageFromIsolatedStorage()
+        {
+            try
+            {
+                using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    if (iso.FileExists(_pageFileName))
+                    {
+                        //using (var stream = new IsolatedStorageFileStream(_pageFileName, FileMode.Open, iso))
+                        using (var stream = iso.OpenFile(_pageFileName, FileMode.Open, FileAccess.Read))
+                        {
+                            BitmapImage bitmap = new BitmapImage();
+                            bitmap.SetSource(stream);
+                            _pageImage = new WriteableBitmap(bitmap);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Image not found: " + _pageFileName, "Error loading image", MessageBoxButton.OK);
+                        NavigationService.GoBack();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error loading image", MessageBoxButton.OK);
+                NavigationService.GoBack();
+            }
         }
 
         private void BuildApplicationBar()
@@ -99,7 +139,7 @@ namespace Toonify
             }
             using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                using (IsolatedStorageFileStream isostream = iso.CreateFile(_pageFileName))
+                using (var isostream = iso.CreateFile(_pageFileName))
                 {
                     Extensions.SaveJpeg(_pageImage, isostream, _pageImage.PixelWidth, _pageImage.PixelHeight, 0, 100);
                     isostream.Close();
@@ -115,7 +155,7 @@ namespace Toonify
 
         private string GeneratePageFileName()
         {
-            return "page_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg";
+            return "page_" + _layout.GetHashCode() + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg";
         }
 
         private void DrawBlankPage()
@@ -290,7 +330,6 @@ namespace Toonify
             _pageImage.Invalidate();
 
             _pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, centreX - (TextWidth(SpeechBubbleTextbox.Text)/2), (int)(centreY - DefaultFontsize*zoom / 2));
-            //_pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, 20, 20);
             _pageImage.Invalidate();
         }
 

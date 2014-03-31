@@ -77,5 +77,11 @@ namespace Toonify
             email.Subject = "Feedback for the Calendar Tile application";
             email.Show();
         }
+
+        private void PageButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)e.OriginalSource; 
+            NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + button.CommandParameter, UriKind.Relative));
+        }
     }
 }
