@@ -29,6 +29,7 @@ namespace Toonify
         private int height = 0;
         private PageLayout _layout;
         private WriteableBitmap _pageImage;
+        private string _pageFileName = string.Empty;
 
         public EditPagePage()
         {
@@ -42,10 +43,13 @@ namespace Toonify
             var newPage = string.Empty; 
             NavigationContext.QueryString.TryGetValue("new", out newPage);
 
-            //var selectedImageName = string.Empty;
-            //NavigationContext.QueryString.TryGetValue("selectedimagename", out selectedImageName);
-
-            if (newPage.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            if (!string.IsNullOrEmpty(App.ViewModel.SelectedImageName))
+            {
+                AddImageToPage(App.ViewModel.SelectedImageName);
+                _pageFileName = GeneratePageFileName();
+                SavePage();
+            }
+            else if (newPage.Equals("true", StringComparison.InvariantCultureIgnoreCase))
             {
                 var layout = string.Empty;
                 NavigationContext.QueryString.TryGetValue("layout", out layout);
@@ -53,22 +57,7 @@ namespace Toonify
 
                 //start new page
                 _pageImage = new WriteableBitmap(DefaultWidth, DefaultHeight);
-                DrawBlankPage(); 
-
-                if (!string.IsNullOrEmpty(App.ViewModel.SelectedImageName))
-                {
-                    //var strInt = string.Empty; 
-                    //NavigationContext.QueryString.TryGetValue("top", out strInt);
-                    //top = int.Parse(strInt);
-                    //NavigationContext.QueryString.TryGetValue("left", out strInt);
-                    //left = int.Parse(strInt);
-                    //NavigationContext.QueryString.TryGetValue("width", out strInt);
-                    //width = int.Parse(strInt);
-                    //NavigationContext.QueryString.TryGetValue("height", out strInt);
-                    //height = int.Parse(strInt);
-
-                    AddImageToPage(App.ViewModel.SelectedImageName); 
-                }
+                DrawBlankPage();
             }
             else
             {
@@ -79,6 +68,33 @@ namespace Toonify
             }
 
             PageImage.Source = _pageImage; 
+        }
+
+        private void SavePage()
+        {
+            using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (IsolatedStorageFileStream isostream = iso.CreateFile(_pageFileName))
+                {
+                    Extensions.SaveJpeg(_pageImage, isostream, _pageImage.PixelWidth, _pageImage.PixelHeight, 0, 100);
+                    isostream.Close();
+                }
+            }
+
+            var imageInStore = App.ViewModel.PageItems.FirstOrDefault(p => p.Name.Equals(_pageImage));
+            if (imageInStore == null)
+            {
+                App.ViewModel.PageItems.Add(new ImageItem { Name = _pageFileName, Image = _pageImage });
+            }
+            else
+            {
+                imageInStore.Image = _pageImage; 
+            }
+        }
+
+        private string GeneratePageFileName()
+        {
+            return "page_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg";
         }
 
         private void DrawBlankPage()

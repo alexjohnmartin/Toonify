@@ -13,7 +13,7 @@ namespace Toonify.ViewModels
     {
         public MainViewModel()
         {
-            this.PageItems = new ObservableCollection<PageItemViewModel>();
+            this.PageItems = new ObservableCollection<ImageItem>();
             this.ImageItems = new ObservableCollection<ImageItem>();
             //this.MediaLibraryItems = new ObservableCollection<ImageItemViewModel>();
         }
@@ -21,7 +21,7 @@ namespace Toonify.ViewModels
         /// <summary>
         /// A collection for ItemViewModel objects.
         /// </summary>
-        public ObservableCollection<PageItemViewModel> PageItems { get; private set; }
+        public ObservableCollection<ImageItem> PageItems { get; private set; }
         public ObservableCollection<ImageItem> ImageItems { get; private set; }
         //public ObservableCollection<ImageItemViewModel> MediaLibraryItems { get; private set; }
 
@@ -75,6 +75,16 @@ namespace Toonify.ViewModels
                     var bitmap = new BitmapImage();
                     bitmap.SetSource(store.OpenFile(file, System.IO.FileMode.Open));
                     ImageItems.Add(new ImageItem { Name = file, Image = new WriteableBitmap(bitmap) });
+                }
+            }
+
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                foreach (var file in store.GetFileNames("page_*"))
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.SetSource(store.OpenFile(file, System.IO.FileMode.Open));
+                    PageItems.Add(new ImageItem { Name = file, Image = new WriteableBitmap(bitmap) });
                 }
             }
 
