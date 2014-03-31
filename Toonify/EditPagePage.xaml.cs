@@ -165,9 +165,23 @@ namespace Toonify
                 case PageLayout.Single:
                     DrawBlankSinglePage();
                     break; 
+                case PageLayout.DoubleSimple:
+                    DrawBlankDoublePage();
+                    break;
                 default:
                     throw new NotImplementedException(); 
             }
+        }
+
+        private void DrawBlankDoublePage()
+        {
+            var centreX = DefaultWidth / 2;
+            var centreY = DefaultHeight / 2;
+            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - centreY - DefaultPageMargin/2, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - centreY + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            DrawAddIcon(centreX, centreY / 2);
+            DrawAddIcon(centreX, centreY / 2 + centreY);
         }
 
         private void DrawBlankSinglePage()
@@ -209,6 +223,15 @@ namespace Toonify
                         width = DefaultWidth - (2 * DefaultPageMargin);
                         height = DefaultHeight - (2 * DefaultPageMargin);
                         break;
+                    case PageLayout.DoubleSimple:
+                        left = DefaultPageMargin;
+                        width = DefaultWidth - (2 * DefaultPageMargin);
+                        height = (DefaultHeight - (2 * DefaultPageMargin)) / 2;
+                        if (tapPosition.Y < PageImage.ActualHeight / 2)
+                            top = DefaultPageMargin;
+                        else
+                            top = (DefaultPageMargin/2) + (DefaultHeight/2);
+                        break; 
                     default:
                         MessageBox.Show("cannot add to this page layout yet", "Error", MessageBoxButton.OK);
                         NavigationService.GoBack();
@@ -237,6 +260,12 @@ namespace Toonify
             {
                 case "Single":
                     return PageLayout.Single;
+                case "DoubleSimple":
+                    return PageLayout.DoubleSimple; 
+                case "TripleSimple":
+                    return PageLayout.TripleSimple; 
+                case "FourSimple":
+                    return PageLayout.FourSimple; 
                 default:
                     MessageBox.Show("cannot edit this page layout yet", "Error", MessageBoxButton.OK);
                     NavigationService.GoBack();
