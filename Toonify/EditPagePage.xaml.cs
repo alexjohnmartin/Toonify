@@ -83,156 +83,10 @@ namespace Toonify
             PageImage.Source = _pageImage; 
         }
 
-        private void LoadImageFromIsolatedStorage()
-        {
-            try
-            {
-                using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                    if (iso.FileExists(_pageFileName))
-                    {
-                        //using (var stream = new IsolatedStorageFileStream(_pageFileName, FileMode.Open, iso))
-                        using (var stream = iso.OpenFile(_pageFileName, FileMode.Open, FileAccess.Read))
-                        {
-                            BitmapImage bitmap = new BitmapImage();
-                            bitmap.SetSource(stream);
-                            _pageImage = new WriteableBitmap(bitmap);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Image not found: " + _pageFileName, "Error loading image", MessageBoxButton.OK);
-                        NavigationService.GoBack();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error loading image", MessageBoxButton.OK);
-                NavigationService.GoBack();
-            }
-        }
-
-        private void BuildApplicationBar()
-        {
-            ApplicationBar = new ApplicationBar();
-
-            // Create a new button and set the text value to the localized string from MeetMeHere.Support.MeetMeHereResources.
-            var addSpeechButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.chat.png", UriKind.Relative));
-            addSpeechButton.Text = "add speech bubble"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
-            addSpeechButton.Click += AddSpeech_Click;
-            ApplicationBar.Buttons.Add(addSpeechButton);
-        }
-
         private void AddSpeech_Click(object sender, EventArgs e)
         {
             _addSpeechBubble = true;
             MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
-        }
-
-        private void SavePage()
-        {
-            using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (iso.FileExists(_pageFileName))
-                    iso.DeleteFile(_pageFileName); 
-            }
-            using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                using (var isostream = iso.CreateFile(_pageFileName))
-                {
-                    Extensions.SaveJpeg(_pageImage, isostream, _pageImage.PixelWidth, _pageImage.PixelHeight, 0, 100);
-                    isostream.Close();
-                }
-            }
-
-            var imageInStore = App.ViewModel.PageItems.FirstOrDefault(p => p.Name.Equals(_pageFileName));
-            if (imageInStore == null)
-                App.ViewModel.PageItems.Add(new ImageItem { Name = _pageFileName, Image = _pageImage });
-            else
-                imageInStore.Image = _pageImage; 
-        }
-
-        private string GeneratePageFileName()
-        {
-            return "page_" + _layout.GetHashCode() + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg";
-        }
-
-        private void DrawBlankPage()
-        {
-            switch (_layout)
-            {
-                case PageLayout.Single:
-                    DrawBlankSinglePage();
-                    break; 
-                case PageLayout.DoubleSimple:
-                    DrawBlankDoublePage();
-                    break;
-                case PageLayout.TripleSimple:
-                    DrawBlankTriplePage();
-                    break; 
-                case PageLayout.FourSimple:
-                    DrawBlankFourPage();
-                    break;
-                default:
-                    throw new NotImplementedException(); 
-            }
-        }
-
-        private void DrawBlankFourPage()
-        {
-            var centreX = DefaultWidth / 2;
-            var centreY = DefaultHeight / 2;
-            var halfMargin = DefaultPageMargin / 2; 
-            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, centreX - halfMargin, centreY - halfMargin, Colors.Black);
-            _pageImage.DrawRectangle(centreX + halfMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, centreY - halfMargin, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, centreY + halfMargin, centreX - halfMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
-            _pageImage.DrawRectangle(centreX + halfMargin, centreY + halfMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
-            DrawAddIcon(DefaultWidth / 4, DefaultHeight / 4);
-            DrawAddIcon(DefaultWidth / 4 * 3, DefaultHeight / 4);
-            DrawAddIcon(DefaultWidth / 4, DefaultHeight / 4 * 3);
-            DrawAddIcon(DefaultWidth / 4 * 3, DefaultHeight / 4 * 3);
-        }
-
-        private void DrawBlankTriplePage()
-        {
-            var centreX = DefaultWidth / 2;
-            var thirdHeight = DefaultHeight / 3; 
-            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, thirdHeight - DefaultPageMargin / 2, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - thirdHeight - DefaultPageMargin/2, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
-            DrawAddIcon(centreX, thirdHeight / 2);
-            DrawAddIcon(centreX, thirdHeight + (thirdHeight / 2));
-            DrawAddIcon(centreX, thirdHeight*2 + (thirdHeight / 2));
-        }
-
-        private void DrawBlankDoublePage()
-        {
-            var centreX = DefaultWidth / 2;
-            var centreY = DefaultHeight / 2;
-            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - centreY - DefaultPageMargin/2, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - centreY + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
-            DrawAddIcon(centreX, centreY / 2);
-            DrawAddIcon(centreX, centreY / 2 + centreY);
-        }
-
-        private void DrawBlankSinglePage()
-        {
-            var centreX = DefaultWidth/2; 
-            var centreY = DefaultHeight/2; 
-            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
-            DrawAddIcon(centreX, centreY);
-        }
-
-        private void DrawAddIcon(int centreX, int centreY)
-        {
-            _pageImage.FillEllipseCentered(centreX, centreY, 70, 70, Colors.Gray);
-            _pageImage.FillRectangle(centreX - 10, centreY - 50, centreX + 10, centreY + 50, Colors.White);
-            _pageImage.FillRectangle(centreX - 50, centreY - 10, centreX + 50, centreY + 10, Colors.White);
         }
 
         private void PageImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -312,6 +166,71 @@ namespace Toonify
             TextDialog.Visibility = System.Windows.Visibility.Visible; 
         }
 
+        private void SpeechOkButton_Click(object sender, RoutedEventArgs e)
+        {
+            TextDialog.Visibility = System.Windows.Visibility.Collapsed;
+            DrawSpeechBubble();
+            SavePage(); 
+        }
+
+        private void SpeechCancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            TextDialog.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void LayoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)e.OriginalSource;
+            _layout = ParseLayoutString(button.CommandParameter.ToString());
+            PageLayoutPanel.Visibility = System.Windows.Visibility.Collapsed;
+            PageImage.Visibility = System.Windows.Visibility.Visible;
+
+            //start new page
+            _pageFileName = GeneratePageFileName();
+            DrawBlankPage();
+        }
+
+        private void LoadImageFromIsolatedStorage()
+        {
+            try
+            {
+                using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    if (iso.FileExists(_pageFileName))
+                    {
+                        //using (var stream = new IsolatedStorageFileStream(_pageFileName, FileMode.Open, iso))
+                        using (var stream = iso.OpenFile(_pageFileName, FileMode.Open, FileAccess.Read))
+                        {
+                            BitmapImage bitmap = new BitmapImage();
+                            bitmap.SetSource(stream);
+                            _pageImage = new WriteableBitmap(bitmap);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Image not found: " + _pageFileName, "Error loading image", MessageBoxButton.OK);
+                        NavigationService.GoBack();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error loading image", MessageBoxButton.OK);
+                NavigationService.GoBack();
+            }
+        }
+
+        private void BuildApplicationBar()
+        {
+            ApplicationBar = new ApplicationBar();
+
+            // Create a new button and set the text value to the localized string from MeetMeHere.Support.MeetMeHereResources.
+            var addSpeechButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.chat.png", UriKind.Relative));
+            addSpeechButton.Text = "add speech bubble"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            addSpeechButton.Click += AddSpeech_Click;
+            ApplicationBar.Buttons.Add(addSpeechButton);
+        }
+
         private PageLayout ParseLayoutString(string layout)
         {
             switch (layout)
@@ -319,11 +238,11 @@ namespace Toonify
                 case "Single":
                     return PageLayout.Single;
                 case "DoubleSimple":
-                    return PageLayout.DoubleSimple; 
+                    return PageLayout.DoubleSimple;
                 case "TripleSimple":
-                    return PageLayout.TripleSimple; 
+                    return PageLayout.TripleSimple;
                 case "FourSimple":
-                    return PageLayout.FourSimple; 
+                    return PageLayout.FourSimple;
                 default:
                     MessageBox.Show("cannot edit this page layout yet", "Error", MessageBoxButton.OK);
                     NavigationService.GoBack();
@@ -363,13 +282,13 @@ namespace Toonify
                 var offsetTop = 0;
                 var offsetLeft = 0;
                 var selectedImageWidth = selectedImage.PixelWidth;
-                var selectedImageHeight = selectedImage.PixelHeight; 
+                var selectedImageHeight = selectedImage.PixelHeight;
                 var aspectRatioOriginal = (double)width / (double)height;
                 var aspectRatioImport = (double)selectedImage.PixelWidth / (double)selectedImage.PixelHeight;
                 if (aspectRatioImport > aspectRatioOriginal)
                 {
                     var zoom = (double)selectedImageHeight / (double)height;
-                    selectedImageWidth = (int)(width * zoom); 
+                    selectedImageWidth = (int)(width * zoom);
                     offsetLeft = (selectedImage.PixelWidth - selectedImageWidth) / 2;
                 }
                 else
@@ -386,37 +305,135 @@ namespace Toonify
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK);               
-            } 
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK);
+            }
         }
 
-        private void SpeechOkButton_Click(object sender, RoutedEventArgs e)
+        private void SavePage()
         {
-            TextDialog.Visibility = System.Windows.Visibility.Collapsed;
-            DrawSpeechBubble();
-            SavePage(); 
+            using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (iso.FileExists(_pageFileName))
+                    iso.DeleteFile(_pageFileName);
+            }
+            using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (var isostream = iso.CreateFile(_pageFileName))
+                {
+                    Extensions.SaveJpeg(_pageImage, isostream, _pageImage.PixelWidth, _pageImage.PixelHeight, 0, 100);
+                    isostream.Close();
+                }
+            }
+
+            var imageInStore = App.ViewModel.PageItems.FirstOrDefault(p => p.Name.Equals(_pageFileName));
+            if (imageInStore == null)
+                App.ViewModel.PageItems.Add(new ImageItem { Name = _pageFileName, Image = _pageImage });
+            else
+                imageInStore.Image = _pageImage;
+        }
+
+        private string GeneratePageFileName()
+        {
+            return "page_" + _layout.GetHashCode() + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg";
+        }
+
+        private void DrawBlankPage()
+        {
+            switch (_layout)
+            {
+                case PageLayout.Single:
+                    DrawBlankSinglePage();
+                    break;
+                case PageLayout.DoubleSimple:
+                    DrawBlankDoublePage();
+                    break;
+                case PageLayout.TripleSimple:
+                    DrawBlankTriplePage();
+                    break;
+                case PageLayout.FourSimple:
+                    DrawBlankFourPage();
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private void DrawBlankFourPage()
+        {
+            var centreX = DefaultWidth / 2;
+            var centreY = DefaultHeight / 2;
+            var halfMargin = DefaultPageMargin / 2;
+            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, centreX - halfMargin, centreY - halfMargin, Colors.Black);
+            _pageImage.DrawRectangle(centreX + halfMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, centreY - halfMargin, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin, centreY + halfMargin, centreX - halfMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            _pageImage.DrawRectangle(centreX + halfMargin, centreY + halfMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            DrawAddIcon(DefaultWidth / 4, DefaultHeight / 4);
+            DrawAddIcon(DefaultWidth / 4 * 3, DefaultHeight / 4);
+            DrawAddIcon(DefaultWidth / 4, DefaultHeight / 4 * 3);
+            DrawAddIcon(DefaultWidth / 4 * 3, DefaultHeight / 4 * 3);
+        }
+
+        private void DrawBlankTriplePage()
+        {
+            var centreX = DefaultWidth / 2;
+            var thirdHeight = DefaultHeight / 3;
+            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, thirdHeight - DefaultPageMargin / 2, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin, thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - thirdHeight - DefaultPageMargin / 2, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            DrawAddIcon(centreX, thirdHeight / 2);
+            DrawAddIcon(centreX, thirdHeight + (thirdHeight / 2));
+            DrawAddIcon(centreX, thirdHeight * 2 + (thirdHeight / 2));
+        }
+
+        private void DrawBlankDoublePage()
+        {
+            var centreX = DefaultWidth / 2;
+            var centreY = DefaultHeight / 2;
+            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - centreY - DefaultPageMargin / 2, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - centreY + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            DrawAddIcon(centreX, centreY / 2);
+            DrawAddIcon(centreX, centreY / 2 + centreY);
+        }
+
+        private void DrawBlankSinglePage()
+        {
+            var centreX = DefaultWidth / 2;
+            var centreY = DefaultHeight / 2;
+            _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
+            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            DrawAddIcon(centreX, centreY);
+        }
+
+        private void DrawAddIcon(int centreX, int centreY)
+        {
+            _pageImage.FillEllipseCentered(centreX, centreY, 70, 70, Colors.Gray);
+            _pageImage.FillRectangle(centreX - 10, centreY - 50, centreX + 10, centreY + 50, Colors.White);
+            _pageImage.FillRectangle(centreX - 50, centreY - 10, centreX + 50, centreY + 10, Colors.White);
         }
 
         private void DrawSpeechBubble()
         {
-            var zoom = 0d; 
+            var zoom = 0d;
             var aspectRatioOriginal = (double)width / (double)height;
             var aspectRatioImport = (double)_pageImage.PixelWidth / (double)_pageImage.PixelHeight;
             if (aspectRatioImport > aspectRatioOriginal)
                 zoom = (double)_pageImage.PixelHeight / (double)PageImage.ActualHeight;
             else
                 zoom = (double)_pageImage.PixelWidth / (double)PageImage.ActualWidth;
-            
-            var textWidth = (int)(TextWidth(SpeechBubbleTextbox.Text) * zoom); 
+
+            var textWidth = (int)(TextWidth(SpeechBubbleTextbox.Text) * zoom);
             var centreY = (int)(top * zoom);
             var centreX = (int)(left * zoom);
             var bubbleWidth = textWidth + 4;
-            var bubbleHeight = (int)((DefaultFontsize + 20) * zoom); 
-            _pageImage.FillEllipseCentered(centreX, centreY, bubbleWidth/2, bubbleHeight/2, Colors.Black);
-            _pageImage.FillEllipseCentered(centreX, centreY, (bubbleWidth / 2)-2, (bubbleHeight / 2)-2, Colors.White);
+            var bubbleHeight = (int)((DefaultFontsize + 20) * zoom);
+            _pageImage.FillEllipseCentered(centreX, centreY, bubbleWidth / 2, bubbleHeight / 2, Colors.Black);
+            _pageImage.FillEllipseCentered(centreX, centreY, (bubbleWidth / 2) - 2, (bubbleHeight / 2) - 2, Colors.White);
             _pageImage.Invalidate();
 
-            _pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, centreX - (TextWidth(SpeechBubbleTextbox.Text)/2), (int)(centreY - DefaultFontsize*zoom / 2));
+            _pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, centreX - (TextWidth(SpeechBubbleTextbox.Text) / 2), (int)(centreY - DefaultFontsize * zoom / 2));
             _pageImage.Invalidate();
         }
 
@@ -425,26 +442,9 @@ namespace Toonify
             TextBlock t = new TextBlock();
             t.Text = text;
             //t.FontFamily = ...
-            t.FontSize = DefaultFontsize; 
+            t.FontSize = DefaultFontsize;
             t.FontWeight = FontWeights.ExtraBold;
             return (int)Math.Ceiling(t.ActualWidth);
-        }
-
-        private void SpeechCancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            TextDialog.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void LayoutButton_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)e.OriginalSource;
-            _layout = ParseLayoutString(button.CommandParameter.ToString());
-            PageLayoutPanel.Visibility = System.Windows.Visibility.Collapsed;
-            PageImage.Visibility = System.Windows.Visibility.Visible;
-
-            //start new page
-            _pageFileName = GeneratePageFileName();
-            DrawBlankPage();
         }
     }
 
