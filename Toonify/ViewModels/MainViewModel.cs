@@ -119,5 +119,7 @@ namespace Toonify.ViewModels
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        public string SelectedImageName { get; set; }
     }
 }

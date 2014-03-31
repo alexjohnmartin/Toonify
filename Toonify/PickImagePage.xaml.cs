@@ -48,7 +48,9 @@ namespace Toonify
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)e.OriginalSource;
-            NavigationService.Navigate(new Uri("/EditPagePage.xaml?selectedimagename=" + button.CommandParameter + "&" + _querystring, UriKind.Relative));
+            //NavigationService.Navigate(new Uri("/EditPagePage.xaml?selectedimagename=" + button.CommandParameter + "&" + _querystring, UriKind.Relative));
+            App.ViewModel.SelectedImageName = button.CommandParameter.ToString();
+            NavigationService.GoBack();
         }
     }
 }
