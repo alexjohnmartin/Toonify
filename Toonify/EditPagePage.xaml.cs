@@ -145,40 +145,13 @@ namespace Toonify
 
             //TODO: allow selective cropping of the image
 
-            //crop image
-            //// Create effect collection with the source stream
-            //var fileStream = new MemoryStream();
-            //selectedImage.SaveJpeg(fileStream, selectedImage.PixelWidth, selectedImage.PixelHeight, 100, 100);
-            //fileStream.Seek(0, SeekOrigin.Begin); 
-            //var target = new WriteableBitmap(width, height);
-            //using (var source = new StreamImageSource(fileStream))
-            //{
-            //    using (var filters = new FilterEffect(source))
-            //    {
-            //        // Initialize the filter 
-            //        var sampleFilter = new CropFilter(new Windows.Foundation.Rect(0, 0, width, height));
-
-            //        // Add the filter to the FilterEffect collection
-            //        filters.Filters = new IFilter[] { sampleFilter };
-
-            //        // Create a target where the filtered image will be rendered to
-                    
-            //        // Create a new renderer which outputs WriteableBitmaps
-            //        using (var renderer = new WriteableBitmapRenderer(filters, target))
-            //        {
-            //            // Render the image with the filter(s)
-            //            await renderer.RenderAsync();
-            //        }
-            //    }
-            //}
-
             //add cropped image to main image
+            //TODO - select a region of the image
             try
             {
                 _pageImage.Blit(new Rect(left, top, width, height),
                                 selectedImage,
-                                new Rect(0, 0, selectedImage.PixelWidth, selectedImage.PixelHeight), //TODO - select a region of the image
-                                WriteableBitmapExtensions.BlendMode.Additive);
+                                new Rect(0, 0, selectedImage.PixelWidth, selectedImage.PixelHeight));
                 PageImage.Source = _pageImage;
             }
             catch (Exception ex)
@@ -188,3 +161,30 @@ namespace Toonify
         }
     }
 }
+
+//crop image
+//// Create effect collection with the source stream
+//var fileStream = new MemoryStream();
+//selectedImage.SaveJpeg(fileStream, selectedImage.PixelWidth, selectedImage.PixelHeight, 100, 100);
+//fileStream.Seek(0, SeekOrigin.Begin); 
+//var target = new WriteableBitmap(width, height);
+//using (var source = new StreamImageSource(fileStream))
+//{
+//    using (var filters = new FilterEffect(source))
+//    {
+//        // Initialize the filter 
+//        var sampleFilter = new CropFilter(new Windows.Foundation.Rect(0, 0, width, height));
+
+//        // Add the filter to the FilterEffect collection
+//        filters.Filters = new IFilter[] { sampleFilter };
+
+//        // Create a target where the filtered image will be rendered to
+
+//        // Create a new renderer which outputs WriteableBitmaps
+//        using (var renderer = new WriteableBitmapRenderer(filters, target))
+//        {
+//            // Render the image with the filter(s)
+//            await renderer.RenderAsync();
+//        }
+//    }
+//}
