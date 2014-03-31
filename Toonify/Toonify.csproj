@@ -147,6 +147,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\ApplicationIconBlack.png" />
+    <Content Include="Assets\Tiles\NormalTile.png" />
+    <Content Include="Assets\Tiles\SmallTile.png" />
+    <Content Include="Assets\Tiles\WideTile.png" />
     <Resource Include="Assets\PanoramaBackground.png" />
     <Content Include="Assets\AppBar\appbar.chat.png" />
     <Content Include="Assets\About\appbar.companioncube.png" />
@@ -168,21 +172,6 @@
     <Content Include="Assets\PageLayouts\FourSimple.png" />
     <Content Include="Assets\PageLayouts\Single.png" />
     <Content Include="Assets\PageLayouts\TripleSimple.png" />
-    <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\FlipCycleTileMedium.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\FlipCycleTileSmall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileMediumLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileSmall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">
