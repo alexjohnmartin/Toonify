@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using System.Collections.ObjectModel;
-using System.IO.IsolatedStorage;
+using Microsoft.Phone.Tasks;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using Nokia.Graphics.Imaging;
-using System.IO;
 
 namespace Toonify
 {
@@ -87,6 +90,19 @@ namespace Toonify
         {
             _addSpeechBubble = true;
             MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
+        }
+
+        private void Export_Click(object sender, EventArgs e)
+        {
+            SaveImageToMediaLibrary();
+            MessageBox.Show("page has been exported to your device's photos", "Export", MessageBoxButton.OK);
+        }
+
+        private void Share_Click(object sender, EventArgs e)
+        {
+            var shareTask = new ShareMediaTask();
+            shareTask.FilePath = SaveImageToMediaLibrary();
+            shareTask.Show(); 
         }
 
         private void PageImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -190,6 +206,27 @@ namespace Toonify
             DrawBlankPage();
         }
 
+        private string SaveImageToMediaLibrary()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                _pageImage.SaveJpeg(stream, _pageImage.PixelWidth, _pageImage.PixelHeight, 0, 100);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
+                {
+                    if (source.MediaSourceType == MediaSourceType.LocalDevice)
+                    {
+                        var mediaLibrary = new MediaLibrary(source);
+                        var picture = mediaLibrary.SavePicture(_pageFileName, stream);
+                        return picture.GetPath();
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
         private void LoadImageFromIsolatedStorage()
         {
             try
@@ -229,6 +266,16 @@ namespace Toonify
             addSpeechButton.Text = "add speech bubble"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
             addSpeechButton.Click += AddSpeech_Click;
             ApplicationBar.Buttons.Add(addSpeechButton);
+
+            var exportButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.save.png", UriKind.Relative));
+            exportButton.Text = "export"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            exportButton.Click += Export_Click;
+            ApplicationBar.Buttons.Add(exportButton);
+
+            var shareButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.message.send.png", UriKind.Relative));
+            shareButton.Text = "share"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            shareButton.Click += Share_Click;
+            ApplicationBar.Buttons.Add(shareButton);
         }
 
         private PageLayout ParseLayoutString(string layout)

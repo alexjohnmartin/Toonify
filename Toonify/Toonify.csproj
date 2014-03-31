@@ -159,6 +159,8 @@
     <Content Include="Assets\About\appbar.social.linkedin.variant.png" />
     <Content Include="Assets\About\appbar.social.twitter.png" />
     <Content Include="Assets\AlignmentGrid.png" />
+    <Content Include="Assets\AppBar\appbar.message.send.png" />
+    <Content Include="Assets\AppBar\appbar.save.png" />
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
