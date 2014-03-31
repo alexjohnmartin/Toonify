@@ -280,11 +280,18 @@ namespace Toonify
             else
                 zoom = (double)_pageImage.PixelWidth / (double)PageImage.ActualWidth;
             
-            var textWidth = TextWidth(SpeechBubbleTextbox.Text);
-            _pageImage.FillEllipseCentered((int)(left * zoom), (int)(top * zoom), (textWidth / 2) + 20, textWidth / 4, Colors.Black);
-            _pageImage.FillEllipseCentered((int)(left * zoom), (int)(top * zoom), (textWidth / 2) + 18, textWidth / 4 - 2, Colors.White);
-            _pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, (int)((left - (textWidth / 2)) * zoom), (int)(top - (DefaultFontsize / 2) * zoom));
-            _pageImage.Invalidate(); 
+            var textWidth = (int)(TextWidth(SpeechBubbleTextbox.Text) * zoom); 
+            var centreY = (int)(top * zoom);
+            var centreX = (int)(left * zoom);
+            var bubbleWidth = textWidth + 4;
+            var bubbleHeight = (int)((DefaultFontsize + 20) * zoom); 
+            _pageImage.FillEllipseCentered(centreX, centreY, bubbleWidth/2, bubbleHeight/2, Colors.Black);
+            _pageImage.FillEllipseCentered(centreX, centreY, (bubbleWidth / 2)-2, (bubbleHeight / 2)-2, Colors.White);
+            _pageImage.Invalidate();
+
+            _pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, centreX - (TextWidth(SpeechBubbleTextbox.Text)/2), (int)(centreY - DefaultFontsize*zoom / 2));
+            //_pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, 20, 20);
+            _pageImage.Invalidate();
         }
 
         public int TextWidth(string text)
