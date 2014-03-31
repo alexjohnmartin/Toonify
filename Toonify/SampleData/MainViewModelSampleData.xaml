@@ -4,7 +4,7 @@
     xmlns:vm="clr-namespace:Toonify.ViewModels"
     SampleProperty="Sample Text Property Value">
 
-    <vm:PickImageViewModel.ImageItems>
+    <!--<vm:PickImageViewModel.ImageItems>
         <vm:ImageItemViewModel ImageUri="design one" Filename="Maecenas praesent accumsan bibendum" LineThree="Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur"/>
         <vm:ImageItemViewModel ImageUri="design two" Filename="Dictumst eleifend facilisi faucibus" LineThree="Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent"/>
         <vm:ImageItemViewModel ImageUri="design three" Filename="Habitant inceptos interdum lobortis" LineThree="Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat"/>
@@ -21,6 +21,6 @@
         <vm:ImageItemViewModel ImageUri="design one" Filename="Maecenas praesent accumsan bibendum" LineThree="Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur"/>
         <vm:ImageItemViewModel ImageUri="design two" Filename="Dictumst eleifend facilisi faucibus" LineThree="Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent"/>
         <vm:ImageItemViewModel ImageUri="design three" Filename="Habitant inceptos interdum lobortis" LineThree="Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat"/>
-    </vm:PickImageViewModel.MediaLibraryItems>
+    </vm:PickImageViewModel.MediaLibraryItems>-->
 
 </vm:PickImageViewModel>

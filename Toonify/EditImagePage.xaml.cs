@@ -13,6 +13,7 @@ using Nokia.InteropServices.WindowsRuntime;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Xna.Framework.Media;
+using System.IO.IsolatedStorage;
 
 namespace Toonify
 {
@@ -89,17 +90,19 @@ namespace Toonify
 
                 //save resulting image
                 //_cartoonImageBitmap.SaveToMediaLibrary("toonify_" + _filename); 
+
+                LoadingPanel.Visibility = System.Windows.Visibility.Collapsed; 
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
-                return;
+                //MessageBox.Show(exception.Message);
+                LoadingMessage.Text = "Error, please try another image";
             }
         }
 
         private async System.Threading.Tasks.Task RenderFinalImage(FilterEffect sketchEffect, FilterEffect cartoonEffect)
         {
-            var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Add);
+            var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Multiply);
             var blendEffect = new FilterEffect(cartoonEffect);
             blendEffect.Filters = new[] { blendFilter };
             var finalRenderer = new WriteableBitmapRenderer(blendEffect, _finalImageBitmap);
@@ -108,7 +111,8 @@ namespace Toonify
 
         private async System.Threading.Tasks.Task<FilterEffect> RenderSketchImage(StreamImageSource imageStream)
         {
-            var sketchFilter = new SketchFilter(SketchMode.Gray);
+            //var sketchFilter = new SketchFilter(SketchMode.Gray);
+            var sketchFilter = new StampFilter(5, 0.5); 
             var sketchEffect = new FilterEffect(imageStream);
             sketchEffect.Filters = new[] { sketchFilter };
             var sketchRenderer = new WriteableBitmapRenderer(sketchEffect, _sketchImageBitmap);
@@ -124,6 +128,46 @@ namespace Toonify
             var cartoonRenderer = new WriteableBitmapRenderer(cartoonEffect, _cartoonImageBitmap);
             await cartoonRenderer.RenderAsync();
             return cartoonEffect; 
+        }
+
+        private void CombinedButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveImage(_finalImageBitmap);
+            NavigationService.GoBack();
+        }
+
+        private void SketchButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveImage(_finalImageBitmap);
+            NavigationService.GoBack(); 
+        }
+
+        private void CartoonButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveImage(_finalImageBitmap);
+            NavigationService.GoBack();
+        }
+
+        private void SaveImage(WriteableBitmap bitmap)
+        {
+            var fileStream = new MemoryStream();
+            bitmap.SaveJpeg(fileStream, bitmap.PixelWidth, bitmap.PixelHeight, 100, 100);
+            fileStream.Seek(0, SeekOrigin.Begin); 
+
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                var filename = "image_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg"; 
+                var stream = store.CreateFile(filename);
+
+                var reader = new StreamReader(fileStream);
+                byte[] contents;
+                using (BinaryReader bReader = new BinaryReader(reader.BaseStream))
+                {
+                    contents = bReader.ReadBytes((int)reader.BaseStream.Length);
+                }
+                stream.Write(contents, 0, contents.Length);
+                stream.Close();
+            }
         }
     }
 }

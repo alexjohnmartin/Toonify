@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="Toonify.EditImagePage"
+    x:Class="Toonify.PickLayoutPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -21,27 +21,34 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,0">
-            <TextBlock Text="pick a style" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <!--<TextBlock Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>-->
+        <StackPanel Grid.Row="0" Margin="12,12,0,12">
+            <TextBlock Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="choose layout" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="230"/>
-                <RowDefinition Height="230"/>
-                <RowDefinition Height="230"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="200"/>
             </Grid.RowDefinitions>
-
-            <Button Name="CartoonButton" Click="CartoonButton_Click"><Image Name="CartoonDisplay" Grid.Row="0"/></Button>
-            <Button Name="SketchButton" Click="SketchButton_Click"><Image Name="SketchDisplay" Grid.Row="1"/></Button>
-            <Button Name="CombinedButton" Click="CombinedButton_Click"><Image Name="ImageDisplay" Grid.Row="2"/></Button>
-
-            <Grid Grid.Row="1" Name="LoadingPanel">
-                <Rectangle Fill="Gray" Height="100" Width="400"/>
-                <TextBlock Text="Loading..." VerticalAlignment="Center" HorizontalAlignment="Center" Name="LoadingMessage"/>
-            </Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button CommandParameter="Single" Grid.Row="0" Grid.Column="0" Click="Button_Click">
+                <Image Source="Assets/PageLayouts/Single.png"/>
+            </Button>
+            <Button CommandParameter="DoubleSimple" Grid.Row="0" Grid.Column="1" Click="Button_Click">
+                <Image Source="Assets/PageLayouts/DoubleSimple.png"/>
+            </Button>
+            <Button CommandParameter="TripleSimple" Grid.Row="1" Grid.Column="0" Click="Button_Click">
+                <Image Source="Assets/PageLayouts/TripleSimple.png"/>
+            </Button>
+            <Button CommandParameter="FourSimple" Grid.Row="1" Grid.Column="1" Click="Button_Click">
+                <Image Source="Assets/PageLayouts/FourSimple.png"/>
+            </Button>
         </Grid>
     </Grid>
 

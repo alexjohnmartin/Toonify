@@ -72,15 +72,26 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImageItem.cs" />
+    <Compile Include="ImportImagePage.xaml.cs">
+      <DependentUpon>ImportImagePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditImagePage.xaml.cs">
       <DependentUpon>EditImagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditPagePage.xaml.cs">
+      <DependentUpon>EditPagePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PageLayout.cs" />
     <Compile Include="PickImagePage.xaml.cs">
       <DependentUpon>PickImagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PickLayoutPage.xaml.cs">
+      <DependentUpon>PickLayoutPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\AppResources.Designer.cs">
@@ -101,7 +112,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="ImportImagePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="EditImagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditPagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,6 +133,10 @@
       <SubType>Designer</SubType>
     </DesignData>
     <Page Include="PickImagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PickLayoutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -146,6 +169,10 @@
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\PageLayouts\DoubleSimple.png" />
+    <Content Include="Assets\PageLayouts\FourSimple.png" />
+    <Content Include="Assets\PageLayouts\Single.png" />
+    <Content Include="Assets\PageLayouts\TripleSimple.png" />
     <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

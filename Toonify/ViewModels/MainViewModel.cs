@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using Toonify.Resources;
 
@@ -13,7 +14,7 @@ namespace Toonify.ViewModels
         public MainViewModel()
         {
             this.PageItems = new ObservableCollection<PageItemViewModel>();
-            this.ImageItems = new ObservableCollection<ImageItemViewModel>();
+            this.ImageItems = new ObservableCollection<ImageItem>();
             //this.MediaLibraryItems = new ObservableCollection<ImageItemViewModel>();
         }
 
@@ -21,7 +22,7 @@ namespace Toonify.ViewModels
         /// A collection for ItemViewModel objects.
         /// </summary>
         public ObservableCollection<PageItemViewModel> PageItems { get; private set; }
-        public ObservableCollection<ImageItemViewModel> ImageItems { get; private set; }
+        public ObservableCollection<ImageItem> ImageItems { get; private set; }
         //public ObservableCollection<ImageItemViewModel> MediaLibraryItems { get; private set; }
 
         private string _sampleProperty = "Sample Runtime Property Value";
@@ -67,23 +68,15 @@ namespace Toonify.ViewModels
         /// </summary>
         public void LoadData()
         {
-            // Sample data; replace with real data
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime one", Filename = "Maecenas praesent accumsan bibendum", LineThree = "Facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime two", Filename = "Dictumst eleifend facilisi faucibus", LineThree = "Suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime three", Filename = "Habitant inceptos interdum lobortis", LineThree = "Habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime four", Filename = "Nascetur pharetra placerat pulvinar", LineThree = "Ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime five", Filename = "Maecenas praesent accumsan bibendum", LineThree = "Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime six", Filename = "Dictumst eleifend facilisi faucibus", LineThree = "Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime seven", Filename = "Habitant inceptos interdum lobortis", LineThree = "Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime eight", Filename = "Nascetur pharetra placerat pulvinar", LineThree = "Pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime nine", Filename = "Maecenas praesent accumsan bibendum", LineThree = "Facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime ten", Filename = "Dictumst eleifend facilisi faucibus", LineThree = "Suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime eleven", Filename = "Habitant inceptos interdum lobortis", LineThree = "Habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime twelve", Filename = "Nascetur pharetra placerat pulvinar", LineThree = "Ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime thirteen", Filename = "Maecenas praesent accumsan bibendum", LineThree = "Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime fourteen", Filename = "Dictumst eleifend facilisi faucibus", LineThree = "Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime fifteen", Filename = "Habitant inceptos interdum lobortis", LineThree = "Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat" });
-            this.ImageItems.Add(new ImageItemViewModel() { ImageUri = "runtime sixteen", Filename = "Nascetur pharetra placerat pulvinar", LineThree = "Pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum" });
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                foreach (var file in store.GetFileNames("image_*"))
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.SetSource(store.OpenFile(file, System.IO.FileMode.Open));
+                    ImageItems.Add(new ImageItem { Name = file, Image = new WriteableBitmap(bitmap) });
+                }
+            }
 
             //PictureAlbum cameraRoll = null;
             //foreach (MediaSource source in MediaSource.GetAvailableMediaSources())

@@ -36,7 +36,12 @@ namespace Toonify
 
         private void ImportImageButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/PickImagePage.xaml", UriKind.Relative)); 
+            NavigationService.Navigate(new Uri("/ImportImagePage.xaml", UriKind.Relative)); 
+        }
+
+        private void NewPage_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/PickLayoutPage.xaml", UriKind.Relative));
         }
     }
 }
