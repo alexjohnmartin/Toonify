@@ -10,12 +10,18 @@ using Toonify.Resources;
 
 namespace Toonify.ViewModels
 {
+    public class PairOfItems
+    {
+        public ImageItem Item1 { get; set; }
+        public ImageItem Item2 { get; set; }
+    }
+
     public class MainViewModel : INotifyPropertyChanged
     {
         public MainViewModel()
         {
-            this.PageItems = new ObservableCollection<ImageItem>();
-            this.ImageItems = new ObservableCollection<ImageItem>();
+            PageItems = new ObservableCollection<ImageItem>();
+            ImageItems = new ObservableCollection<ImageItem>();
         }
 
         /// <summary>
@@ -23,6 +29,55 @@ namespace Toonify.ViewModels
         /// </summary>
         public ObservableCollection<ImageItem> PageItems { get; private set; }
         public ObservableCollection<ImageItem> ImageItems { get; private set; }
+
+        public ObservableCollection<PairOfItems> PageItemPairs
+        {
+            get
+            {
+                var collection = new ObservableCollection<PairOfItems>();
+                var pair = new PairOfItems();
+                foreach (var item in PageItems)
+                {
+                    if (pair.Item1 == null)
+                        pair.Item1 = item;
+                    else if (pair.Item2 == null)
+                        pair.Item2 = item;
+                    else
+                    {
+                        collection.Add(pair);
+                        pair = new PairOfItems();
+                        pair.Item1 = item;
+                    }
+                }
+                return collection; 
+            }
+        }
+
+        public ObservableCollection<PairOfItems> ImageItemPairs
+        {
+            get
+            {
+                var collection = new ObservableCollection<PairOfItems>();
+                var pair = new PairOfItems();
+                foreach (var item in ImageItems)
+                {
+                    if (pair.Item1 == null)
+                        pair.Item1 = item;
+                    else if (pair.Item2 == null)
+                        pair.Item2 = item;
+                    else
+                    {
+                        collection.Add(pair);
+                        pair = new PairOfItems();
+                        pair.Item1 = item;
+                    }
+                }
+                if (pair.Item1 != null)
+                    collection.Add(pair); 
+
+                return collection;
+            }
+        }
 
         public bool IsDataLoaded
         {

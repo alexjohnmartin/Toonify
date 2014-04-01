@@ -28,8 +28,8 @@
                 <StackPanel Orientation="Vertical" Margin="0, -40, 0, 0">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="225"/>
-                            <ColumnDefinition Width="225"/>
+                            <ColumnDefinition Width="215"/>
+                            <ColumnDefinition Width="215"/>
                         </Grid.ColumnDefinitions>
                         
                         <Button Name="ImportImageButton" Click="ImportImageButton_Click" Grid.Column="0">
@@ -41,13 +41,19 @@
                     </Grid>
                     
                     <!--Single line list with text wrapping-->
-                    <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding ImageItems}">
+                    <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding ImageItemPairs}">
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="0,12,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="225"/>
+                                        <ColumnDefinition Width="225"/>
+                                    </Grid.ColumnDefinitions>
+                                    
                                     <!--<TextBlock Text="{Binding ImageUri}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>-->
-                                    <Image Source="{Binding Image}" Height="100" Width="100"/>
-                                </StackPanel>
+                                    <Image Source="{Binding Item1.Image}" Grid.Column="0" Width="200" Height="200"/>
+                                    <Image Source="{Binding Item2.Image}" Grid.Column="1" Width="200" Height="200"/>
+                                </Grid>
                             </DataTemplate>
                         </phone:LongListSelector.ItemTemplate>
                     </phone:LongListSelector>
