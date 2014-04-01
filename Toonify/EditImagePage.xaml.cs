@@ -207,7 +207,7 @@ namespace Toonify
                 stream.Close();
             }
 
-            App.ViewModel.ImageItems.Add(new ImageItem { Name = filename, Image = bitmap }); 
+            App.ViewModel.AddImageItem(new ImageItem { Name = filename, Image = bitmap }); 
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)

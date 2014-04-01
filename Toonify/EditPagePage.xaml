@@ -29,7 +29,7 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Grid x:Name="PageLayoutPanel" Grid.Row="1" Margin="12,0,12,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="80"/>
                     <RowDefinition Height="200"/>
                     <RowDefinition Height="200"/>
                 </Grid.RowDefinitions>
@@ -55,8 +55,26 @@
             </Grid>
 
             <StackPanel Visibility="Collapsed" Grid.Row="1" Margin="12,0,12,0" Name="PagePanel">
-                <TextBlock Name="TitleText" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>
-                <Image Name="PageImage" Tap="PageImage_Tap"/>
+                <!--<TextBlock Name="TitleText" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="220"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Name="AddImageButton" Grid.Row="0" Grid.Column="0" IsEnabled="False" Click="AddImage_Click">
+                        <TextBlock Text="add image"/>
+                    </Button>
+                    <Button Name="AddSpeechButton" Grid.Row="0" Grid.Column="1" Click="AddSpeech_Click">
+                        <TextBlock Text="add speech"/>
+                    </Button>
+                </Grid>
+                
+                <Image Name="PageImage" Tap="PageImage_Tap" Grid.Row="1" Grid.ColumnSpan="2"/>
             </StackPanel>
             
             <Grid Name="TextDialog" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Visibility="Collapsed" Margin="0, 100, 0, 0">

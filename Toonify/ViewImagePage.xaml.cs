@@ -12,6 +12,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
+using System.IO.IsolatedStorage;
 
 namespace Toonify
 {
@@ -51,6 +52,29 @@ namespace Toonify
             shareButton.Text = "share"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
             shareButton.Click += Share_Click;
             ApplicationBar.Buttons.Add(shareButton);
+
+            var deleteButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.delete.png", UriKind.Relative));
+            deleteButton.Text = "delete"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            deleteButton.Click += Delete_Click;
+            ApplicationBar.Buttons.Add(deleteButton);
+        }
+
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                //delete image from isostore
+                using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    if (iso.FileExists(_imageItem.Name))
+                        iso.DeleteFile(_imageItem.Name);
+                }
+
+                //remove image from viewmodel
+                App.ViewModel.RemoveImageItem(_imageItem);
+
+                NavigationService.GoBack();
+            }
         }
 
         private void Export_Click(object sender, EventArgs e)

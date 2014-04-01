@@ -147,6 +147,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\AppBar\appbar.delete.png" />
     <Content Include="Assets\AppBar\appbar.image.beach.png" />
     <Content Include="Assets\ApplicationIconBlack.png" />
     <Content Include="Assets\PanoramaBackgroundWhite.png" />

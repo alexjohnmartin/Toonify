@@ -133,5 +133,33 @@ namespace Toonify.ViewModels
         }
 
         public string SelectedImageName { get; set; }
+
+        internal void RemoveImageItem(ImageItem item)
+        {
+            ImageItems.Remove(item);
+            NotifyPropertyChanged("ImageItems");
+            NotifyPropertyChanged("ImageItemPairs"); 
+        }
+
+        internal void AddImageItem(ImageItem item)
+        {
+            ImageItems.Add(item);
+            NotifyPropertyChanged("ImageItems");
+            NotifyPropertyChanged("ImageItemPairs");
+        }
+
+        internal void RemovePageItem(ImageItem item)
+        {
+            PageItems.Remove(item);
+            NotifyPropertyChanged("PageItems");
+            NotifyPropertyChanged("PageItemPairs");
+        }
+
+        internal void AddPageItem(ImageItem item)
+        {
+            PageItems.Add(item);
+            NotifyPropertyChanged("PageItems");
+            NotifyPropertyChanged("PageItemPairs");
+        }
     }
 }

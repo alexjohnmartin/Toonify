@@ -88,18 +88,21 @@ namespace Toonify
             PageImage.Source = _pageImage; 
         }
 
-        private void AddSpeech_Click(object sender, EventArgs e)
+        protected void AddSpeech_Click(object sender, EventArgs e)
         {
             _addSpeechBubble = true;
             //MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
-            TitleText.Text = "add text"; 
+            //TitleText.Text = "add text"; 
+            AddSpeechButton.IsEnabled = false;
+            AddImageButton.IsEnabled = true; 
         }
 
-        private void AddImage_Click(object sender, EventArgs e)
+        protected void AddImage_Click(object sender, EventArgs e)
         {
             _addSpeechBubble = false;
-            //MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
-            TitleText.Text = "add image";
+            //TitleText.Text = "add image";
+            AddSpeechButton.IsEnabled = true;
+            AddImageButton.IsEnabled = false; 
         }
 
         private void Export_Click(object sender, EventArgs e)
@@ -216,6 +219,25 @@ namespace Toonify
             DrawBlankPage();
         }
 
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                //delete image from isostore
+                using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    if (iso.FileExists(_pageFileName))
+                        iso.DeleteFile(_pageFileName);
+                }
+
+                //remove image from viewmodel
+                var item = App.ViewModel.PageItems.FirstOrDefault(i => i.Name.Equals(_pageFileName, StringComparison.InvariantCultureIgnoreCase));
+                App.ViewModel.RemovePageItem(item);
+
+                NavigationService.GoBack();
+            }
+        }
+
         private string SaveImageToMediaLibrary()
         {
             using (MemoryStream stream = new MemoryStream())
@@ -272,15 +294,15 @@ namespace Toonify
             ApplicationBar = new ApplicationBar();
 
             // Create a new button and set the text value to the localized string from MeetMeHere.Support.MeetMeHereResources.
-            var addSpeechButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.chat.png", UriKind.Relative));
-            addSpeechButton.Text = "add speech bubble"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
-            addSpeechButton.Click += AddSpeech_Click;
-            ApplicationBar.Buttons.Add(addSpeechButton);
+            //var addSpeechButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.chat.png", UriKind.Relative));
+            //addSpeechButton.Text = "add speech bubble"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            //addSpeechButton.Click += AddSpeech_Click;
+            //ApplicationBar.Buttons.Add(addSpeechButton);
 
-            var addImageButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.image.beach.png", UriKind.Relative));
-            addImageButton.Text = "add image"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
-            addImageButton.Click += AddImage_Click;
-            ApplicationBar.Buttons.Add(addImageButton);
+            //var addImageButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.image.beach.png", UriKind.Relative));
+            //addImageButton.Text = "add image"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            //addImageButton.Click += AddImage_Click;
+            //ApplicationBar.Buttons.Add(addImageButton);
 
             var exportButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.save.png", UriKind.Relative));
             exportButton.Text = "export"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
@@ -291,6 +313,11 @@ namespace Toonify
             shareButton.Text = "share"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
             shareButton.Click += Share_Click;
             ApplicationBar.Buttons.Add(shareButton);
+
+            var deleteButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.delete.png", UriKind.Relative));
+            deleteButton.Text = "delete"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            deleteButton.Click += Delete_Click;
+            ApplicationBar.Buttons.Add(deleteButton);
         }
 
         private PageLayout ParseLayoutString(string layout)
@@ -389,7 +416,7 @@ namespace Toonify
 
             var imageInStore = App.ViewModel.PageItems.FirstOrDefault(p => p.Name.Equals(_pageFileName));
             if (imageInStore == null)
-                App.ViewModel.PageItems.Add(new ImageItem { Name = _pageFileName, Image = _pageImage });
+                App.ViewModel.AddPageItem(new ImageItem { Name = _pageFileName, Image = _pageImage });
             else
                 imageInStore.Image = _pageImage;
         }
