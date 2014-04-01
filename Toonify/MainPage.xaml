@@ -25,7 +25,7 @@
 
             <!--Panorama item one-->
             <phone:PanoramaItem Header="Images">
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Margin="0, -40, 0, 0">
                     <StackPanel Orientation="Horizontal">
                         <Button Name="ImportImageButton" Click="ImportImageButton_Click">
                             <TextBlock Text="Import image"/>
@@ -52,7 +52,7 @@
             <!--Panorama item two-->
             <phone:PanoramaItem Header="Pages">
                 <!--Double line list with image placeholder and text wrapping using a floating header that scrolls with the content-->
-                <StackPanel>
+                <StackPanel Orientation="Vertical" Margin="0, -40, 0, 0">
                     <Button Name="NewPage" Click="NewPage_Click">
                         <TextBlock Text="Add page" />
                     </Button>
@@ -91,7 +91,7 @@
             <phone:PanoramaItem Header="{Binding Path=LocalizedResources.AboutHeader, Source={StaticResource LocalizedStrings}}">
                 <Grid x:Name="AboutPanel" Grid.Row="1" Margin="0,-40,0,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="100" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="200" />
                         <RowDefinition Height="200" />
                         <RowDefinition Height="200" />

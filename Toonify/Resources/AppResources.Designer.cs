@@ -97,11 +97,20 @@ namespace Toonify.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turn your photos into comics.
+        ///   Looks up a localized string similar to Turn your photos into comics, pick from different layouts, add speech bubbles and share your creations with your friends. .
         /// </summary>
         public static string AboutDescription {
             get {
                 return ResourceManager.GetString("AboutDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string AboutHeader {
+            get {
+                return ResourceManager.GetString("AboutHeader", resourceCulture);
             }
         }
         
