@@ -105,7 +105,7 @@ namespace Toonify
         private void Export_Click(object sender, EventArgs e)
         {
             SaveImageToMediaLibrary();
-            MessageBox.Show("page has been exported to your device's photos", "Export", MessageBoxButton.OK);
+            MessageBox.Show("Page has been exported to your device's photos", "Export", MessageBoxButton.OK);
         }
 
         private void Share_Click(object sender, EventArgs e)
