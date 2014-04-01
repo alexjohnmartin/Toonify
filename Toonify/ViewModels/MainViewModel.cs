@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Toonify.Resources;
 
@@ -14,6 +16,12 @@ namespace Toonify.ViewModels
     {
         public ImageItem Item1 { get; set; }
         public ImageItem Item2 { get; set; }
+        public Brush BackgroundColor { get; set; }
+
+        public PairOfItems()
+        {
+            BackgroundColor = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
+        }
     }
 
     public class MainViewModel : INotifyPropertyChanged

@@ -54,8 +54,11 @@
                                             <RowDefinition Height="215"/>
                                         </Grid.RowDefinitions>
 
-                                        <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="200" Height="200" Tap="Image_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="200" Height="200" Tap="Image_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="0" Grid.Row="0"/>
+                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="1" Grid.Row="0"/>
+                                        
+                                        <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="180" Height="180" Tap="Image_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="180" Height="180" Tap="Image_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </Grid>
                                 </DataTemplate>
                             </phone:LongListSelector.ItemTemplate>
@@ -83,9 +86,12 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="215"/>
                                         </Grid.RowDefinitions>
-                                            
-                                        <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="0" Grid.Row="0"/>
+                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="1" Grid.Row="0"/>
+
+                                        <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="180" Height="180" Tap="PageImage_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="180" Height="180" Tap="PageImage_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </Grid>
                                 </DataTemplate>
                             </phone:LongListSelector.ItemTemplate>
