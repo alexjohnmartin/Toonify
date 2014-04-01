@@ -16,11 +16,13 @@ namespace Toonify.ViewModels
     {
         public ImageItem Item1 { get; set; }
         public ImageItem Item2 { get; set; }
-        public Brush BackgroundColor { get; set; }
+        public Brush Item1BackgroundColor { get { return _backgroundColor; } }
+        public Brush Item2BackgroundColor { get { return Item2 != null ? _backgroundColor : new SolidColorBrush(); } }
+        private Brush _backgroundColor { get; set; }
 
         public PairOfItems()
         {
-            BackgroundColor = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
+            _backgroundColor = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
         }
     }
 

@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneBackgroundBrush}"
@@ -40,7 +39,9 @@
                                 <TextBlock Text="Take photo"/>
                             </Button>
                         </Grid>
-                    
+
+                        <TextBlock Name="ImageTutorialText" Text="First add import some images or take some photos" TextWrapping="Wrap" Margin="12,12,12,12"/>
+                        
                         <!--Single line list with text wrapping-->
                         <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding ImageItemPairs}">
                             <phone:LongListSelector.ItemTemplate>
@@ -54,8 +55,8 @@
                                             <RowDefinition Height="215"/>
                                         </Grid.RowDefinitions>
 
-                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="0" Grid.Row="0"/>
-                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="1" Grid.Row="0"/>
+                                        <Rectangle Fill="{Binding Item1BackgroundColor}" Height="200" Width="200" Grid.Column="0" Grid.Row="0"/>
+                                        <Rectangle Fill="{Binding Item2BackgroundColor}" Height="200" Width="200" Grid.Column="1" Grid.Row="0"/>
                                         
                                         <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="180" Height="180" Tap="Image_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                         <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="180" Height="180" Tap="Image_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -75,6 +76,9 @@
                         <Button Name="NewPage" Click="NewPage_Click">
                             <TextBlock Text="Add page" />
                         </Button>
+
+                        <TextBlock Name="PageTutorialText" Text="First add import some images or take some photos" TextWrapping="Wrap" Margin="12,12,12,12"/>
+                        
                         <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding PageItemPairs}">
                             <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>
@@ -87,8 +91,8 @@
                                             <RowDefinition Height="215"/>
                                         </Grid.RowDefinitions>
 
-                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="0" Grid.Row="0"/>
-                                        <Rectangle Fill="{Binding BackgroundColor}" Height="200" Width="200" Grid.Column="1" Grid.Row="0"/>
+                                        <Rectangle Fill="{Binding Item1BackgroundColor}" Height="200" Width="200" Grid.Column="0" Grid.Row="0"/>
+                                        <Rectangle Fill="{Binding Item2BackgroundColor}" Height="200" Width="200" Grid.Column="1" Grid.Row="0"/>
 
                                         <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="180" Height="180" Tap="PageImage_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                         <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="180" Height="180" Tap="PageImage_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>

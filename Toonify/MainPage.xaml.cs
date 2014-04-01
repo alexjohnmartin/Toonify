@@ -33,8 +33,10 @@ namespace Toonify
             {
                 App.ViewModel.LoadData();
             }
+
+            UpdateTutorialText(); 
         }
-        
+
         protected void cameraCaptureTask_Completed(object sender, PhotoResult e)
         {
             if (e.TaskResult == TaskResult.OK)
@@ -109,6 +111,27 @@ namespace Toonify
         {
             var image = (Image)e.OriginalSource; 
             NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + image.Tag, UriKind.Relative));
+        }
+
+        private void UpdateTutorialText()
+        {
+            bool anyPages = App.ViewModel.PageItems.Any();
+            bool anyImages = App.ViewModel.ImageItems.Any();
+
+            NewPage.IsEnabled = anyImages; 
+            PageTutorialText.Visibility = anyPages && anyImages ? Visibility.Collapsed : Visibility.Visible;
+            ImageTutorialText.Visibility = anyPages && anyImages ? Visibility.Collapsed : Visibility.Visible;
+
+            if (!anyImages)
+            {
+                PageTutorialText.Text = "First add some images by taking photos or importing from your saved pictures";
+                ImageTutorialText.Text = "First add some images by taking photos or importing from your saved pictures";
+            }
+            else if (!anyPages)
+            {
+                PageTutorialText.Text = "Now create new pages and add your images";
+                ImageTutorialText.Text = "Now create new pages and add your images";
+            }
         }
     }
 }
