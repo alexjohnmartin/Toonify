@@ -25,65 +25,73 @@
 
             <!--Panorama item one-->
             <phone:PanoramaItem Header="Images">
-                <StackPanel Orientation="Vertical" Margin="0, -40, 0, 0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="215"/>
-                            <ColumnDefinition Width="215"/>
-                        </Grid.ColumnDefinitions>
+                <ScrollViewer Margin="0, -40, 0, 0">
+                    <StackPanel Orientation="Vertical">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="215"/>
+                                <ColumnDefinition Width="215"/>
+                            </Grid.ColumnDefinitions>
                         
-                        <Button Name="ImportImageButton" Click="ImportImageButton_Click" Grid.Column="0">
-                            <TextBlock Text="Import image"/>
-                        </Button>
-                        <Button Name="TakePhotoButton" Click="TakePhotoButton_Click" Grid.Column="1">
-                            <TextBlock Text="Take photo"/>
-                        </Button>
-                    </Grid>
+                            <Button Name="ImportImageButton" Click="ImportImageButton_Click" Grid.Column="0">
+                                <TextBlock Text="Import image"/>
+                            </Button>
+                            <Button Name="TakePhotoButton" Click="TakePhotoButton_Click" Grid.Column="1">
+                                <TextBlock Text="Take photo"/>
+                            </Button>
+                        </Grid>
                     
-                    <!--Single line list with text wrapping-->
-                    <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding ImageItemPairs}">
-                        <phone:LongListSelector.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="225"/>
-                                        <ColumnDefinition Width="225"/>
-                                    </Grid.ColumnDefinitions>
-                                    
-                                    <!--<TextBlock Text="{Binding ImageUri}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>-->
-                                    <Image Source="{Binding Item1.Image}" Grid.Column="0" Width="200" Height="200"/>
-                                    <Image Source="{Binding Item2.Image}" Grid.Column="1" Width="200" Height="200"/>
-                                </Grid>
-                            </DataTemplate>
-                        </phone:LongListSelector.ItemTemplate>
-                    </phone:LongListSelector>
-                </StackPanel>
+                        <!--Single line list with text wrapping-->
+                        <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding ImageItemPairs}">
+                            <phone:LongListSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="215"/>
+                                            <ColumnDefinition Width="215"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="215"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="200" Height="200" Tap="Image_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="200" Height="200" Tap="Image_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </phone:LongListSelector.ItemTemplate>
+                        </phone:LongListSelector>
+                    </StackPanel>
+                </ScrollViewer>
             </phone:PanoramaItem>
 
             <!--Panorama item two-->
             <phone:PanoramaItem Header="Pages">
                 <!--Double line list with image placeholder and text wrapping using a floating header that scrolls with the content-->
-                <StackPanel Orientation="Vertical" Margin="0, -40, 0, 0">
-                    <Button Name="NewPage" Click="NewPage_Click">
-                        <TextBlock Text="Add page" />
-                    </Button>
-                    <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding PageItemPairs}">
-                        <phone:LongListSelector.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="225"/>
-                                        <ColumnDefinition Width="225"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <!--<TextBlock Text="{Binding ImageUri}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>-->
-                                    <Image Source="{Binding Item1.Image}" Grid.Column="0" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item1.Name}"/>
-                                    <Image Source="{Binding Item2.Image}" Grid.Column="1" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item2.Name}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </phone:LongListSelector.ItemTemplate>
-                    </phone:LongListSelector>
-                </StackPanel>
+                <ScrollViewer Margin="0, -40, 0, 0">
+                    <StackPanel Orientation="Vertical">
+                        <Button Name="NewPage" Click="NewPage_Click">
+                            <TextBlock Text="Add page" />
+                        </Button>
+                        <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding PageItemPairs}">
+                            <phone:LongListSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="215"/>
+                                            <ColumnDefinition Width="215"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="215"/>
+                                        </Grid.RowDefinitions>
+                                            
+                                        <Image Source="{Binding Item1.Image}" Grid.Column="0" Grid.Row="0" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item1.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <Image Source="{Binding Item2.Image}" Grid.Column="1" Grid.Row="0" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item2.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </phone:LongListSelector.ItemTemplate>
+                        </phone:LongListSelector>
+                    </StackPanel>
+                </ScrollViewer>
             </phone:PanoramaItem>
 
             <!--Panorama item three-->
