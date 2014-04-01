@@ -26,14 +26,19 @@
             <!--Panorama item one-->
             <phone:PanoramaItem Header="Images">
                 <StackPanel Orientation="Vertical" Margin="0, -40, 0, 0">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Name="ImportImageButton" Click="ImportImageButton_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="225"/>
+                            <ColumnDefinition Width="225"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Button Name="ImportImageButton" Click="ImportImageButton_Click" Grid.Column="0">
                             <TextBlock Text="Import image"/>
                         </Button>
-                        <Button Name="TakePhotoButton" Click="TakePhotoButton_Click">
+                        <Button Name="TakePhotoButton" Click="TakePhotoButton_Click" Grid.Column="1">
                             <TextBlock Text="Take photo"/>
                         </Button>
-                    </StackPanel>
+                    </Grid>
                     
                     <!--Single line list with text wrapping-->
                     <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding ImageItems}">
