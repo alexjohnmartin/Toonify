@@ -23,42 +23,65 @@ namespace Toonify
         private const int DefaultHeight = 1000;
 
         private string _filename = string.Empty;
+        private IsolatedStorageSettings _settings; 
         private WriteableBitmap _finalImageBitmap = null;
         private WriteableBitmap _sketchImageBitmap = null;
         private WriteableBitmap _cartoonImageBitmap = null;
         private WriteableBitmap _thumbnailImageBitmap = null;
-
+        
         public EditImagePage()
         {
             InitializeComponent();
+            DataContext = this; 
+            _settings = IsolatedStorageSettings.ApplicationSettings;
+            if (!_settings.Contains("EffectListIndex")) _settings.Add("EffectListIndex", 0); 
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            EffectList.SelectedIndex = (int)_settings["EffectListIndex"]; 
 
             _filename = string.Empty;
-            if (!NavigationContext.QueryString.TryGetValue("name", out _filename)) return; 
+            if (!NavigationContext.QueryString.TryGetValue("name", out _filename)) return;
 
+            ConvertAndDisplayImage();
+        }
+
+        private void ConvertAndDisplayImage()
+        {
             foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
             {
                 if (source.MediaSourceType == MediaSourceType.LocalDevice)
                 {
-                    var mediaLibrary = new MediaLibrary(source);    
+                    var mediaLibrary = new MediaLibrary(source);
                     PictureAlbumCollection allAlbums = mediaLibrary.RootPictureAlbum.Albums;
                     foreach (PictureAlbum album in allAlbums)
                     {
                         if (album.Name == "Camera Roll")
                         {
-                            var pic = album.Pictures.Where(p => p.Name.Equals(_filename, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault(); 
+                            var pic = album.Pictures.Where(p => p.Name.Equals(_filename, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
                             if (pic != null)
                             {
-                                CreateCartoonImage(pic.GetImage(), pic.Width, pic.Height); 
+                                switch (EffectList.SelectedIndex)
+                                {
+                                    case 0:
+                                        CreateCartoonImage(pic.GetImage(), pic.Width, pic.Height);
+                                        break;
+                                    case 1:
+                                        CreateInkedImage(pic.GetImage(), pic.Width, pic.Height);
+                                        break;
+                                    case 2:
+                                        CreateCombinedImage(pic.GetImage(), pic.Width, pic.Height);
+                                        break;
+                                }
                             }
                         }
                     }
                 }
             }
+
+            LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         private async void CreateCartoonImage(Stream chosenPhoto, int width, int height)
@@ -105,11 +128,6 @@ namespace Toonify
                 //SketchDisplay.Source = _sketchImageBitmap;
                 CartoonDisplay.Source = _cartoonImageBitmap;
                 //OriginalDisplay.Source = _thumbnailImageBitmap;
-
-                //save resulting image
-                //_cartoonImageBitmap.SaveToMediaLibrary("toonify_" + _filename); 
-
-                LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
             }
             catch (OutOfMemoryException)
             {
@@ -123,25 +141,139 @@ namespace Toonify
             }
         }
 
-        //private async System.Threading.Tasks.Task RenderFinalImage(FilterEffect sketchEffect, FilterEffect cartoonEffect)
-        //{
-        //    var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Multiply);
-        //    var blendEffect = new FilterEffect(cartoonEffect);
-        //    blendEffect.Filters = new[] { blendFilter };
-        //    var finalRenderer = new WriteableBitmapRenderer(blendEffect, _finalImageBitmap);
-        //    await finalRenderer.RenderAsync();
-        //}
+        private async void CreateInkedImage(Stream chosenPhoto, int width, int height)
+        {
+            try
+            {
+                // Rewind stream to start.                     
+                chosenPhoto.Position = 0;
+                var imageStream = new StreamImageSource(chosenPhoto);
 
-        //private async System.Threading.Tasks.Task<FilterEffect> RenderSketchImage(StreamImageSource imageStream)
-        //{
-        //    //var sketchFilter = new SketchFilter(SketchMode.Gray);
-        //    var sketchFilter = new StampFilter(5, 0.5); 
-        //    var sketchEffect = new FilterEffect(imageStream);
-        //    sketchEffect.Filters = new[] { sketchFilter };
-        //    var sketchRenderer = new WriteableBitmapRenderer(sketchEffect, _sketchImageBitmap);
-        //    await sketchRenderer.RenderAsync();
-        //    return sketchEffect;
-        //}
+                //var originalImage = new WriteableBitmap(width, height);
+                //originalImage.SetSource(chosenPhoto); 
+
+                var selectedImageWidth = DefaultWidth;
+                var selectedImageHeight = DefaultHeight;
+                var aspectRatioOriginal = (double)width / (double)height;
+                var aspectRatioImport = (double)DefaultWidth / (double)DefaultHeight;
+                if (aspectRatioImport < aspectRatioOriginal)
+                {
+                    var zoom = (double)height / (double)DefaultHeight;
+                    selectedImageWidth = (int)(width / zoom);
+                }
+                else
+                {
+                    var zoom = (double)width / (double)DefaultWidth;
+                    selectedImageHeight = (int)(height / zoom);
+                }
+
+                //_finalImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                _sketchImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                //_cartoonImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                //_thumbnailImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+
+                //_thumbnailImageBitmap.Blit(new Rect(0, 0, selectedImageWidth, selectedImageHeight),
+                //                originalImage,
+                //                new Rect(0, 0, width, height));
+
+                // A cartoon effect is initialized with selected image stream as source.
+                var sketchEffect = await RenderSketchImage(imageStream);
+                //var cartoonEffect = await RenderCartoonImage(imageStream);
+                //await RenderFinalImage(sketchEffect, cartoonEffect);
+
+                //ImageDisplay.Source = _finalImageBitmap;
+                CartoonDisplay.Source = _sketchImageBitmap;
+                //CartoonDisplay.Source = _cartoonImageBitmap;
+                //OriginalDisplay.Source = _thumbnailImageBitmap;
+            }
+            catch (OutOfMemoryException)
+            {
+                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                NavigateBackToHomeScreen();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                NavigationService.GoBack();
+            }
+        }
+
+        private async void CreateCombinedImage(Stream chosenPhoto, int width, int height)
+        {
+            try
+            {
+                // Rewind stream to start.                     
+                chosenPhoto.Position = 0;
+                var imageStream = new StreamImageSource(chosenPhoto);
+
+                //var originalImage = new WriteableBitmap(width, height);
+                //originalImage.SetSource(chosenPhoto); 
+
+                var selectedImageWidth = DefaultWidth;
+                var selectedImageHeight = DefaultHeight;
+                var aspectRatioOriginal = (double)width / (double)height;
+                var aspectRatioImport = (double)DefaultWidth / (double)DefaultHeight;
+                if (aspectRatioImport < aspectRatioOriginal)
+                {
+                    var zoom = (double)height / (double)DefaultHeight;
+                    selectedImageWidth = (int)(width / zoom);
+                }
+                else
+                {
+                    var zoom = (double)width / (double)DefaultWidth;
+                    selectedImageHeight = (int)(height / zoom);
+                }
+
+                _finalImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                _sketchImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                _cartoonImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+                //_thumbnailImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
+
+                //_thumbnailImageBitmap.Blit(new Rect(0, 0, selectedImageWidth, selectedImageHeight),
+                //                originalImage,
+                //                new Rect(0, 0, width, height));
+
+                // A cartoon effect is initialized with selected image stream as source.
+                var sketchEffect = await RenderSketchImage(imageStream);
+                var cartoonEffect = await RenderCartoonImage(imageStream);
+                await RenderFinalImage(sketchEffect, cartoonEffect);
+
+                CartoonDisplay.Source = _finalImageBitmap;
+                //SketchDisplay.Source = _sketchImageBitmap;
+                //CartoonDisplay.Source = _cartoonImageBitmap;
+                //OriginalDisplay.Source = _thumbnailImageBitmap;
+            }
+            catch (OutOfMemoryException)
+            {
+                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                NavigateBackToHomeScreen();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                NavigationService.GoBack();
+            }
+        }
+
+        private async System.Threading.Tasks.Task RenderFinalImage(FilterEffect sketchEffect, FilterEffect cartoonEffect)
+        {
+            var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Multiply);
+            var blendEffect = new FilterEffect(cartoonEffect);
+            blendEffect.Filters = new[] { blendFilter };
+            var finalRenderer = new WriteableBitmapRenderer(blendEffect, _finalImageBitmap);
+            await finalRenderer.RenderAsync();
+        }
+
+        private async System.Threading.Tasks.Task<FilterEffect> RenderSketchImage(StreamImageSource imageStream)
+        {
+            //var sketchFilter = new SketchFilter(SketchMode.Gray);
+            var sketchFilter = new StampFilter(5, 0.4);
+            var sketchEffect = new FilterEffect(imageStream);
+            sketchEffect.Filters = new[] { sketchFilter };
+            var sketchRenderer = new WriteableBitmapRenderer(sketchEffect, _sketchImageBitmap);
+            await sketchRenderer.RenderAsync();
+            return sketchEffect;
+        }
 
         private async System.Threading.Tasks.Task<FilterEffect> RenderCartoonImage(StreamImageSource imageStream)
         {
@@ -186,13 +318,42 @@ namespace Toonify
             NavigationService.GoBack(); 
         }
 
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (EffectList.SelectedIndex)
+            { 
+                case 0:
+                    SaveImage(_cartoonImageBitmap);
+                    break;
+                case 1:
+                    SaveImage(_sketchImageBitmap);
+                    break;
+                case 2:
+                    SaveImage(_finalImageBitmap);
+                    break; 
+            }
+            NavigateBackToHomeScreen();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateBackToHomeScreen();
+        }
+
+        private void EffectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadingPanel.Visibility = System.Windows.Visibility.Visible;
+            _settings["EffectListIndex"] = EffectList.SelectedIndex;
+            ConvertAndDisplayImage(); 
+        }
+
         private void SaveImage(WriteableBitmap bitmap)
         {
             var fileStream = new MemoryStream();
             bitmap.SaveJpeg(fileStream, bitmap.PixelWidth, bitmap.PixelHeight, 100, 100);
-            fileStream.Seek(0, SeekOrigin.Begin); 
-            
-            var filename = "image_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg"; 
+            fileStream.Seek(0, SeekOrigin.Begin);
+
+            var filename = "image_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg";
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 var stream = store.CreateFile(filename);
@@ -207,18 +368,7 @@ namespace Toonify
                 stream.Close();
             }
 
-            App.ViewModel.AddImageItem(new ImageItem { Name = filename, Image = bitmap }); 
-        }
-
-        private void OkButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveImage(_cartoonImageBitmap);
-            NavigateBackToHomeScreen();
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigateBackToHomeScreen();
+            App.ViewModel.AddImageItem(new ImageItem { Name = filename, Image = bitmap });
         }
     }
 }

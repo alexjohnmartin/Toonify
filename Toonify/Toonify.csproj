@@ -155,7 +155,6 @@
     <Content Include="Assets\Tiles\NormalTile.png" />
     <Content Include="Assets\Tiles\SmallTile.png" />
     <Content Include="Assets\Tiles\WideTile.png" />
-    <Content Include="README_FIRST.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
