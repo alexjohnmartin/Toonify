@@ -10,7 +10,7 @@
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
+    Foreground="{StaticResource PhoneBackgroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="False">
 
@@ -59,12 +59,9 @@
                     <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding PageItems}">
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="0,12,0,0">
-                                    <!--<TextBlock Text="{Binding ImageUri}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>-->
-                                    <Button Name="PageButton" Click="PageButton_Click" CommandParameter="{Binding Name}">
-                                        <Image Source="{Binding Image}" Height="100" Width="100"/>
-                                    </Button>
-                                </StackPanel>
+                                <Button Name="PageButton" Click="PageButton_Click" CommandParameter="{Binding Name}" Margin="0,12,22,2">
+                                    <Image Source="{Binding Image}" Height="100" Width="100"/>
+                                </Button>
                             </DataTemplate>
                         </phone:LongListSelector.ItemTemplate>
                     </phone:LongListSelector>

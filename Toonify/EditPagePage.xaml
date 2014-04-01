@@ -21,15 +21,15 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <!--<TextBlock Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,12">
+            <TextBlock Text="Toonify" Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Grid x:Name="PageLayoutPanel" Grid.Row="1" Margin="12,0,12,0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
                     <RowDefinition Height="200"/>
                     <RowDefinition Height="200"/>
                 </Grid.RowDefinitions>
@@ -38,23 +38,28 @@
                     <ColumnDefinition Width="220"/>
                 </Grid.ColumnDefinitions>
 
-                <Button CommandParameter="Single" Grid.Row="0" Grid.Column="0" Click="LayoutButton_Click">
+                <TextBlock Text="pick layout" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>
+                
+                <Button CommandParameter="Single" Grid.Row="1" Grid.Column="0" Click="LayoutButton_Click">
                     <Image Source="Assets/PageLayouts/Single.png"/>
                 </Button>
-                <Button CommandParameter="DoubleSimple" Grid.Row="0" Grid.Column="1" Click="LayoutButton_Click">
+                <Button CommandParameter="DoubleSimple" Grid.Row="1" Grid.Column="1" Click="LayoutButton_Click">
                     <Image Source="Assets/PageLayouts/DoubleSimple.png"/>
                 </Button>
-                <Button CommandParameter="TripleSimple" Grid.Row="1" Grid.Column="0" Click="LayoutButton_Click">
+                <Button CommandParameter="TripleSimple" Grid.Row="2" Grid.Column="0" Click="LayoutButton_Click">
                     <Image Source="Assets/PageLayouts/TripleSimple.png"/>
                 </Button>
-                <Button CommandParameter="FourSimple" Grid.Row="1" Grid.Column="1" Click="LayoutButton_Click">
+                <Button CommandParameter="FourSimple" Grid.Row="2" Grid.Column="1" Click="LayoutButton_Click">
                     <Image Source="Assets/PageLayouts/FourSimple.png"/>
                 </Button>
             </Grid>
 
-            <Image Name="PageImage" Tap="PageImage_Tap" Visibility="Collapsed"/>
-
-            <Grid Name="TextDialog" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Visibility="Collapsed">
+            <StackPanel Visibility="Collapsed" Grid.Row="1" Margin="12,0,12,0" Name="PagePanel">
+                <TextBlock Name="TitleText" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>
+                <Image Name="PageImage" Tap="PageImage_Tap"/>
+            </StackPanel>
+            
+            <Grid Name="TextDialog" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Visibility="Collapsed" Margin="0, 100, 0, 0">
                 <Rectangle Fill="Gray"></Rectangle>
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="Enter text for speech bubble" Margin="12, 6, 0, 0"/>

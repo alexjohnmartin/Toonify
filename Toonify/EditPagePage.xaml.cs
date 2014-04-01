@@ -46,6 +46,8 @@ namespace Toonify
         {
             base.OnNavigatedTo(e);
 
+            AddImage_Click(null, null); 
+
             var dummy = string.Empty; 
             var newPage = NavigationContext.QueryString.TryGetValue("new", out dummy);
 
@@ -59,7 +61,7 @@ namespace Toonify
             else if (newPage)
             {
                 PageLayoutPanel.Visibility = System.Windows.Visibility.Visible;
-                PageImage.Visibility = System.Windows.Visibility.Collapsed;
+                PagePanel.Visibility = System.Windows.Visibility.Collapsed;
                 TextDialog.Visibility = System.Windows.Visibility.Collapsed;
                 _pageFileName = string.Empty;
                 _pageImage = new WriteableBitmap(DefaultWidth, DefaultHeight);
@@ -77,7 +79,7 @@ namespace Toonify
                 LoadImageFromIsolatedStorage(); 
 
                 PageLayoutPanel.Visibility = System.Windows.Visibility.Collapsed;
-                PageImage.Visibility = System.Windows.Visibility.Visible;
+                PagePanel.Visibility = System.Windows.Visibility.Visible;
                 TextDialog.Visibility = System.Windows.Visibility.Collapsed;
                 _addSpeechBubble = false;
                 PageImage.Source = _pageImage; 
@@ -89,7 +91,15 @@ namespace Toonify
         private void AddSpeech_Click(object sender, EventArgs e)
         {
             _addSpeechBubble = true;
-            MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
+            //MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
+            TitleText.Text = "add text"; 
+        }
+
+        private void AddImage_Click(object sender, EventArgs e)
+        {
+            _addSpeechBubble = false;
+            //MessageBox.Show("tap on image to place a speech bubble", "Speech bubble", MessageBoxButton.OK); 
+            TitleText.Text = "add image";
         }
 
         private void Export_Click(object sender, EventArgs e)
@@ -199,7 +209,7 @@ namespace Toonify
             var button = (Button)e.OriginalSource;
             _layout = ParseLayoutString(button.CommandParameter.ToString());
             PageLayoutPanel.Visibility = System.Windows.Visibility.Collapsed;
-            PageImage.Visibility = System.Windows.Visibility.Visible;
+            PagePanel.Visibility = System.Windows.Visibility.Visible;
 
             //start new page
             _pageFileName = GeneratePageFileName();
@@ -266,6 +276,11 @@ namespace Toonify
             addSpeechButton.Text = "add speech bubble"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
             addSpeechButton.Click += AddSpeech_Click;
             ApplicationBar.Buttons.Add(addSpeechButton);
+
+            var addImageButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.image.beach.png", UriKind.Relative));
+            addImageButton.Text = "add image"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            addImageButton.Click += AddImage_Click;
+            ApplicationBar.Buttons.Add(addImageButton);
 
             var exportButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.save.png", UriKind.Relative));
             exportButton.Text = "export"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;

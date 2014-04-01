@@ -99,9 +99,6 @@
     <Compile Include="StripBackgroundPage.xaml.cs">
       <DependentUpon>StripBackgroundPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\PickImageViewModel.cs" />
-    <Compile Include="ViewModels\PageItemViewModel.cs" />
-    <Compile Include="ViewModels\ImageItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +144,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\AppBar\appbar.image.beach.png" />
     <Content Include="Assets\ApplicationIconBlack.png" />
+    <Content Include="Assets\PanoramaBackgroundWhite.png" />
     <Content Include="Assets\Tiles\NormalTile.png" />
     <Content Include="Assets\Tiles\SmallTile.png" />
     <Content Include="Assets\Tiles\WideTile.png" />
