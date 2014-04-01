@@ -7,12 +7,11 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Microsoft.Phone.Tasks;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
-using System.IO.IsolatedStorage;
 
 namespace Toonify
 {
@@ -61,54 +60,19 @@ namespace Toonify
 
         private void Delete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            {
-                //delete image from isostore
-                using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                    if (iso.FileExists(_imageItem.Name))
-                        iso.DeleteFile(_imageItem.Name);
-                }
-
-                //remove image from viewmodel
-                App.ViewModel.RemoveImageItem(_imageItem);
-
+            if (ImageHelper.Delete(_imageItem))
                 NavigationService.GoBack();
-            }
         }
 
         private void Export_Click(object sender, EventArgs e)
         {
-            SaveImageToMediaLibrary();
+            ImageHelper.SaveImageToMediaLibrary(_imageItem);
             MessageBox.Show("Image has been exported to your device's photos", "Export", MessageBoxButton.OK);
         }
 
         private void Share_Click(object sender, EventArgs e)
         {
-            var shareTask = new ShareMediaTask();
-            shareTask.FilePath = SaveImageToMediaLibrary();
-            shareTask.Show();
-        }
-
-        private string SaveImageToMediaLibrary()
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                _imageItem.Image.SaveJpeg(stream, _imageItem.Image.PixelWidth, _imageItem.Image.PixelHeight, 0, 100);
-                stream.Seek(0, SeekOrigin.Begin);
-
-                foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
-                {
-                    if (source.MediaSourceType == MediaSourceType.LocalDevice)
-                    {
-                        var mediaLibrary = new MediaLibrary(source);
-                        var picture = mediaLibrary.SavePicture(_imageItem.Name, stream);
-                        return picture.GetPath();
-                    }
-                }
-            }
-
-            return string.Empty;
+            ImageHelper.Share(_imageItem); 
         }
     }
 }

@@ -113,6 +113,27 @@ namespace Toonify
             NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + image.Tag, UriKind.Relative));
         }
 
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var imageItem = (ImageItem)menuItem.Tag;
+            ImageHelper.SaveImageToMediaLibrary(imageItem); 
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var imageItem = (ImageItem)menuItem.Tag; 
+            ImageHelper.Delete(imageItem); 
+        }
+
+        private void Share_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var imageItem = (ImageItem)menuItem.Tag;
+            ImageHelper.Share(imageItem); 
+        }
+
         private void UpdateTutorialText()
         {
             bool anyPages = App.ViewModel.PageItems.Any();
