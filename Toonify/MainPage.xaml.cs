@@ -93,10 +93,16 @@ namespace Toonify
             email.Show();
         }
 
-        private void PageButton_Click(object sender, RoutedEventArgs e)
+        //private void PageButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var button = (Button)e.OriginalSource; 
+        //    NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + button.CommandParameter, UriKind.Relative));
+        //}
+
+        private void PageImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var button = (Button)e.OriginalSource; 
-            NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + button.CommandParameter, UriKind.Relative));
+            var image = (Image)e.OriginalSource; 
+            NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + image.Tag, UriKind.Relative));
         }
     }
 }

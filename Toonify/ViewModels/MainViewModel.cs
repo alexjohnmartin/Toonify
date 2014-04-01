@@ -49,6 +49,9 @@ namespace Toonify.ViewModels
                         pair.Item1 = item;
                     }
                 }
+                if (pair.Item1 != null)
+                    collection.Add(pair); 
+
                 return collection; 
             }
         }

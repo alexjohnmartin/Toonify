@@ -67,12 +67,19 @@
                     <Button Name="NewPage" Click="NewPage_Click">
                         <TextBlock Text="Add page" />
                     </Button>
-                    <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding PageItems}">
+                    <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding PageItemPairs}">
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <Button Name="PageButton" Click="PageButton_Click" CommandParameter="{Binding Name}" Margin="0,12,22,2">
-                                    <Image Source="{Binding Image}" Height="100" Width="100"/>
-                                </Button>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="225"/>
+                                        <ColumnDefinition Width="225"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--<TextBlock Text="{Binding ImageUri}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>-->
+                                    <Image Source="{Binding Item1.Image}" Grid.Column="0" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item1.Name}"/>
+                                    <Image Source="{Binding Item2.Image}" Grid.Column="1" Width="200" Height="200" Tap="PageImage_Tap" Tag="{Binding Item2.Name}"/>
+                                </Grid>
                             </DataTemplate>
                         </phone:LongListSelector.ItemTemplate>
                     </phone:LongListSelector>
