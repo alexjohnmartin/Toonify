@@ -99,6 +99,12 @@ namespace Toonify
         //    NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + button.CommandParameter, UriKind.Relative));
         //}
 
+        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var image = (Image)e.OriginalSource;
+            NavigationService.Navigate(new Uri("/ViewImagePage.xaml?name=" + image.Tag, UriKind.Relative));
+        }
+
         private void PageImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var image = (Image)e.OriginalSource; 
