@@ -19,37 +19,16 @@ namespace Toonify
 {
     public partial class PickImagePage : PhoneApplicationPage
     {
-        private const int MaxImages = 100;
-        private List<BitmapImage> lstBitmapImage;
-        private string _querystring = string.Empty; 
-
-        private ObservableCollection<ImageItem> _listOfImages = new ObservableCollection<ImageItem>();
-        public ObservableCollection<ImageItem> ListOfImages
-        {
-            get { return _listOfImages; }
-            set { _listOfImages = value; }
-        }
-
         public PickImagePage()
         {
             InitializeComponent();
             DataContext = App.ViewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            base.OnNavigatedTo(e);
-
-            //TODO:save querystring params so we can send them back
-            if (e.Uri.OriginalString.Contains('?'))
-                _querystring = e.Uri.OriginalString.Substring(e.Uri.OriginalString.IndexOf('?') + 1);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)e.OriginalSource;
-            //NavigationService.Navigate(new Uri("/EditPagePage.xaml?selectedimagename=" + button.CommandParameter + "&" + _querystring, UriKind.Relative));
-            App.ViewModel.SelectedImageName = button.CommandParameter.ToString();
+            var image = (Image)e.OriginalSource;
+            App.ViewModel.SelectedImageName = image.Tag.ToString(); 
             NavigationService.GoBack();
         }
     }
