@@ -257,8 +257,8 @@ namespace Toonify
 
         private async System.Threading.Tasks.Task RenderFinalImage(FilterEffect sketchEffect, FilterEffect cartoonEffect)
         {
-            var blendFilter = new BlendFilter(sketchEffect, BlendFunction.Multiply);
-            var blendEffect = new FilterEffect(cartoonEffect);
+            var blendFilter = new BlendFilter(cartoonEffect, BlendFunction.Multiply);
+            var blendEffect = new FilterEffect(sketchEffect);
             blendEffect.Filters = new[] { blendFilter };
             var finalRenderer = new WriteableBitmapRenderer(blendEffect, _finalImageBitmap);
             await finalRenderer.RenderAsync();
