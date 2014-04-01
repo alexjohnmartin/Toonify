@@ -22,6 +22,7 @@ namespace Toonify
         private const int DefaultWidth = 768;
         private const int DefaultHeight = 1000;
 
+        private bool _pageLoaded = false; 
         private string _filename = string.Empty;
         private IsolatedStorageSettings _settings; 
         private WriteableBitmap _finalImageBitmap = null;
@@ -46,6 +47,7 @@ namespace Toonify
             if (!NavigationContext.QueryString.TryGetValue("name", out _filename)) return;
 
             ConvertAndDisplayImage();
+            _pageLoaded = true;
         }
 
         private void ConvertAndDisplayImage()
@@ -320,6 +322,8 @@ namespace Toonify
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
+            _settings["EffectListIndex"] = EffectList.SelectedIndex;
+            NavigateBackToHomeScreen();
             switch (EffectList.SelectedIndex)
             { 
                 case 0:
@@ -332,7 +336,6 @@ namespace Toonify
                     SaveImage(_finalImageBitmap);
                     break; 
             }
-            NavigateBackToHomeScreen();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -342,9 +345,11 @@ namespace Toonify
 
         private void EffectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            LoadingPanel.Visibility = System.Windows.Visibility.Visible;
-            _settings["EffectListIndex"] = EffectList.SelectedIndex;
-            ConvertAndDisplayImage(); 
+            if (_pageLoaded)
+            {
+                LoadingPanel.Visibility = System.Windows.Visibility.Visible;
+                ConvertAndDisplayImage();
+            }
         }
 
         private void SaveImage(WriteableBitmap bitmap)
