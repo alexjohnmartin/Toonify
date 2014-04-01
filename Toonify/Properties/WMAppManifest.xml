@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{27fd2cd8-7d95-45b4-bf39-d501da4f610e}" Title="Toonify" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Toonify author" Description="Turn your photos into comic strips with Toonify" Publisher="Toonify" PublisherID="{c0f35723-cf12-4c5a-8718-ae0da2af03ff}">
+  <App xmlns="" ProductID="{27fd2cd8-7d95-45b4-bf39-d501da4f610e}" Title="Toonify" RuntimeType="Silverlight" Version="1.1.0.0" Genre="apps.normal" Author="Alex Martin" Description="Turn your photos into comic strips with Toonify" Publisher="Nocturnal Tendencies" PublisherID="{c0f35723-cf12-4c5a-8718-ae0da2af03ff}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_ISV_CAMERA" />
