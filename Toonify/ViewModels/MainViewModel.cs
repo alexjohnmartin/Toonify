@@ -171,5 +171,12 @@ namespace Toonify.ViewModels
             NotifyPropertyChanged("PageItems");
             NotifyPropertyChanged("PageItemPairs");
         }
+
+        internal void UpdatePageItem(ImageItem item, WriteableBitmap image)
+        {
+            item.Image = image;
+            NotifyPropertyChanged("PageItems");
+            NotifyPropertyChanged("PageItemPairs");
+        }
     }
 }

@@ -418,7 +418,7 @@ namespace Toonify
             if (imageInStore == null)
                 App.ViewModel.AddPageItem(new ImageItem { Name = _pageFileName, Image = _pageImage });
             else
-                imageInStore.Image = _pageImage;
+                App.ViewModel.UpdatePageItem(imageInStore, _pageImage);
         }
 
         private string GeneratePageFileName()
