@@ -24,12 +24,11 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,0">
             <TextBlock Text="Toonify" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <!--<TextBlock Text="pick a style" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>-->
-            <toolkit:ListPicker Name="EffectList" SelectionChanged="EffectList_SelectionChanged">
+            <!--<toolkit:ListPicker Name="EffectList" SelectionChanged="EffectList_SelectionChanged">
                 <toolkit:ListPickerItem Content="cartoon effect" Name="CartoonItem"/>
                 <toolkit:ListPickerItem Content="inked effect" Name="InkedItem"/>
                 <toolkit:ListPickerItem Content="combined effect" Name="CombinedItem"/>
-            </toolkit:ListPicker>
+            </toolkit:ListPicker>-->
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -42,11 +41,6 @@
                 <ColumnDefinition Width="225"/>
                 <ColumnDefinition Width="225"/>
             </Grid.ColumnDefinitions>
-            
-            <!--<Button Name="OriginalButton" Click="OriginalButton_Click" Grid.Row="0" Grid.Column="0"><Image Name="OriginalDisplay"/></Button>
-            <Button Name="CartoonButton" Click="CartoonButton_Click" Grid.Row="0" Grid.Column="1"><Image Name="CartoonDisplay"/></Button>
-            <Button Name="SketchButton" Click="SketchButton_Click" Grid.Row="1" Grid.Column="0"><Image Name="SketchDisplay"/></Button>
-            <Button Name="CombinedButton" Click="CombinedButton_Click" Grid.Row="1" Grid.Column="1"><Image Name="ImageDisplay"/></Button>-->
 
             <Image Name="CartoonDisplay" Grid.Row="0" Grid.ColumnSpan="2"/>
             <Button Grid.Row="1" Grid.Column="0" Name="OkButton" Click="OkButton_Click">

@@ -22,8 +22,10 @@ namespace Toonify
     public partial class EditPagePage : PhoneApplicationPage
     {
         //768 x 1000 = page size = 8" x 10.5" at 96dpi
-        private const int DefaultWidth = 768;
-        private const int DefaultHeight = 1000;
+        //private const int DefaultWidth = 768;
+        //private const int DefaultHeight = 1000;
+        private const int DefaultWidth = 600;
+        private const int DefaultHeight = 800;
         private const int DefaultPageMargin = 20;
         private const int DefaultFontsize = 20;
 
