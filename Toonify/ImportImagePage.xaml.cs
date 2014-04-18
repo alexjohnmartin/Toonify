@@ -44,26 +44,33 @@ namespace Toonify
         private void LoadImagesFromMediaLibrary()
         {
             //_listOfImages = new ObservableCollection<ImageItem>(); 
-            foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
+            try
             {
-                if (source.MediaSourceType == MediaSourceType.LocalDevice)
+                foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
                 {
-                    var mediaLibrary = new MediaLibrary(source);
-                    PictureAlbumCollection allAlbums = mediaLibrary.RootPictureAlbum.Albums;
-                    foreach (PictureAlbum album in allAlbums)
+                    if (source.MediaSourceType == MediaSourceType.LocalDevice)
                     {
-                        if (album.Name == "Camera Roll")
+                        var mediaLibrary = new MediaLibrary(source);
+                        PictureAlbumCollection allAlbums = mediaLibrary.RootPictureAlbum.Albums;
+                        foreach (PictureAlbum album in allAlbums)
                         {
-                            foreach (Picture p in album.Pictures)
+                            if (album.Name == "Camera Roll")
                             {
-                                BitmapImage b = new BitmapImage();
-                                b.SetSource(p.GetThumbnail());
-                                var wb = new WriteableBitmap(b);
-                                ListOfImages.Add(new ImageItem { Image = wb, Name = p.Name });
+                                foreach (Picture p in album.Pictures)
+                                {
+                                    BitmapImage b = new BitmapImage();
+                                    b.SetSource(p.GetThumbnail());
+                                    var wb = new WriteableBitmap(b);
+                                    ListOfImages.Add(new ImageItem { Image = wb, Name = p.Name });
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message, "Error selecting image", MessageBoxButton.OK);
             }
         }
 

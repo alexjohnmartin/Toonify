@@ -48,44 +48,53 @@ namespace Toonify
             _filename = string.Empty;
             if (!NavigationContext.QueryString.TryGetValue("name", out _filename)) return;
 
+            OkButton.IsEnabled = false;
+            CancelButton.IsEnabled = false;
+            LoadingPanel.Visibility = System.Windows.Visibility.Visible;
             ConvertAndDisplayImage();
             //_pageLoaded = true;
         }
 
         private void ConvertAndDisplayImage()
         {
-            foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
+            try
             {
-                if (source.MediaSourceType == MediaSourceType.LocalDevice)
+                foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
                 {
-                    var mediaLibrary = new MediaLibrary(source);
-                    PictureAlbumCollection allAlbums = mediaLibrary.RootPictureAlbum.Albums;
-                    foreach (PictureAlbum album in allAlbums)
+                    if (source.MediaSourceType == MediaSourceType.LocalDevice)
                     {
-                        if (album.Name == "Camera Roll")
+                        var mediaLibrary = new MediaLibrary(source);
+                        PictureAlbumCollection allAlbums = mediaLibrary.RootPictureAlbum.Albums;
+                        foreach (PictureAlbum album in allAlbums)
                         {
-                            var pic = album.Pictures.Where(p => p.Name.Equals(_filename, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
-                            if (pic != null)
+                            if (album.Name == "Camera Roll")
                             {
-                                //switch (EffectList.SelectedIndex)
-                                //{
-                                //    case 0:
-                                //        CreateCartoonImage(pic.GetImage(), pic.Width, pic.Height);
-                                //        break;
-                                //    case 1:
-                                //        CreateInkedImage(pic.GetImage(), pic.Width, pic.Height);
-                                //        break;
-                                //    case 2:
-                                        CreateCombinedImage(pic.GetImage(), pic.Width, pic.Height);
-                                //        break;
-                                //}
+                                var pic = album.Pictures.FirstOrDefault(p => p.Name.Equals(_filename, StringComparison.InvariantCultureIgnoreCase));
+                                if (pic != null)
+                                {
+                                    //switch (EffectList.SelectedIndex)
+                                    //{
+                                    //    case 0:
+                                    //        CreateCartoonImage(pic.GetImage(), pic.Width, pic.Height);
+                                    //        break;
+                                    //    case 1:
+                                    //        CreateInkedImage(pic.GetImage(), pic.Width, pic.Height);
+                                    //        break;
+                                    //    case 2:
+                                    CreateCombinedImage(pic.GetImage(), pic.Width, pic.Height);
+                                    //        break;
+                                    //}
+                                }
                             }
                         }
                     }
                 }
             }
-
-            LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message, "Error loading image", MessageBoxButton.OK);
+                LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
+            }
         }
 
         //private async void CreateCartoonImage(Stream chosenPhoto, int width, int height)
@@ -235,15 +244,18 @@ namespace Toonify
                 await RenderFinalImage(sketchEffect, cartoonEffect);
 
                 CartoonDisplay.Source = _finalImageBitmap;
+                OkButton.IsEnabled = true;
+                CancelButton.IsEnabled = true;
+                LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
             }
             catch (OutOfMemoryException)
             {
-                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                MessageBox.Show("Out of memory, your device may not be powerful enough", "Error", MessageBoxButton.OK);
                 NavigateBackToHomeScreen();
             }
             catch (Exception)
             {
-                MessageBox.Show("Out of memory", "Error", MessageBoxButton.OK);
+                MessageBox.Show("Error converting image", "Error", MessageBoxButton.OK);
                 NavigationService.GoBack();
             }
         }
