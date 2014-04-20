@@ -18,13 +18,13 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
         
          <!--Panorama control-->
-        <phone:Panorama Title="Toonify">
-            <phone:Panorama.Background>
+        <phone:Panorama Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}">
+            <!--<phone:Panorama.Background>
                 <ImageBrush ImageSource="/Toonify;component/Assets/PanoramaBackground.png"/>
-            </phone:Panorama.Background>
+            </phone:Panorama.Background>-->
 
             <!--Panorama item one-->
-            <phone:PanoramaItem Header="Images">
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.ImagesHeader, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Margin="0, -40, 0, 0">
                     <StackPanel Orientation="Vertical">
                         <Grid>
@@ -34,14 +34,15 @@
                             </Grid.ColumnDefinitions>
                         
                             <Button Name="ImportImageButton" Click="ImportImageButton_Click" Grid.Column="0">
-                                <TextBlock Text="Import image"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.ImportImageButton, Source={StaticResource LocalizedStrings}}"/>
                             </Button>
                             <Button Name="TakePhotoButton" Click="TakePhotoButton_Click" Grid.Column="1">
-                                <TextBlock Text="Take photo"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.TakePhotoButton, Source={StaticResource LocalizedStrings}}"/>
                             </Button>
                         </Grid>
 
-                        <TextBlock Name="ImageTutorialText" Text="First add import some images or take some photos" TextWrapping="Wrap" Margin="12,12,12,12"/>
+                        <TextBlock Name="ImageTutorialText" Text="{Binding Path=LocalizedResources.TutorialTextImportImages, Source={StaticResource LocalizedStrings}}" 
+                                   TextWrapping="Wrap" Margin="12,12,12,12"/>
                         
                         <!--Single line list with text wrapping-->
                         <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding ImageItemPairs}">
@@ -86,15 +87,15 @@
             </phone:PanoramaItem>
 
             <!--Panorama item two-->
-            <phone:PanoramaItem Header="Pages">
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.PagesHeader, Source={StaticResource LocalizedStrings}}">
                 <!--Double line list with image placeholder and text wrapping using a floating header that scrolls with the content-->
                 <ScrollViewer Margin="0, -40, 0, 0">
                     <StackPanel Orientation="Vertical">
                         <Button Name="NewPage" Click="NewPage_Click">
-                            <TextBlock Text="Add page" />
+                            <TextBlock Text="{Binding Path=LocalizedResources.NewPageButton, Source={StaticResource LocalizedStrings}}" />
                         </Button>
 
-                        <TextBlock Name="PageTutorialText" Text="First add import some images or take some photos" TextWrapping="Wrap" Margin="12,12,12,12"/>
+                        <TextBlock Name="PageTutorialText" Text="{Binding Path=LocalizedResources.TutorialTextImportImages, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Margin="12,12,12,12"/>
                         
                         <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding PageItemPairs}">
                             <phone:LongListSelector.ItemTemplate>

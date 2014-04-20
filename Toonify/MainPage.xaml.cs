@@ -145,13 +145,13 @@ namespace Toonify
 
             if (!anyImages)
             {
-                PageTutorialText.Text = "First add some images by taking photos or importing from your saved pictures";
-                ImageTutorialText.Text = "First add some images by taking photos or importing from your saved pictures";
+                PageTutorialText.Text = Toonify.Resources.AppResources.TutorialTextImportImages;
+                ImageTutorialText.Text = Toonify.Resources.AppResources.TutorialTextImportImages;
             }
             else if (!anyPages)
             {
-                PageTutorialText.Text = "Now create new pages and add your images";
-                ImageTutorialText.Text = "Now create new pages and add your images";
+                PageTutorialText.Text = Toonify.Resources.AppResources.TutorialTextCreatePages;
+                ImageTutorialText.Text = Toonify.Resources.AppResources.TutorialTextCreatePages;
             }
         }
     }

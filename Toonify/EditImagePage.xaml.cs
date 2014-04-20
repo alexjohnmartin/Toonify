@@ -250,12 +250,12 @@ namespace Toonify
             }
             catch (OutOfMemoryException)
             {
-                MessageBox.Show("Out of memory, your device may not be powerful enough", "Error", MessageBoxButton.OK);
+                MessageBox.Show(Toonify.Resources.AppResources.OutOfMemoryError, Toonify.Resources.AppResources.ErrorTitle, MessageBoxButton.OK);
                 NavigateBackToHomeScreen();
             }
             catch (Exception)
             {
-                MessageBox.Show("Error converting image", "Error", MessageBoxButton.OK);
+                MessageBox.Show(Toonify.Resources.AppResources.ErrorConvertingImage, Toonify.Resources.AppResources.ErrorTitle, MessageBoxButton.OK);
                 NavigationService.GoBack();
             }
         }

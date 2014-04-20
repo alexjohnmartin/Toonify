@@ -37,11 +37,13 @@ namespace Toonify
         private WriteableBitmap _pageImage;
         private bool _addSpeechBubble = false; 
         private string _pageFileName = string.Empty;
+        private string _speechBubbleWatermark = string.Empty;
 
         public EditPagePage()
         {
             InitializeComponent();
-            ApplicationBar = new ApplicationBar(); 
+            ApplicationBar = new ApplicationBar();
+            _speechBubbleWatermark = Toonify.Resources.AppResources.EnterSpeechBubbleTextWatermark;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -102,7 +104,6 @@ namespace Toonify
         protected void AddImage_Click(object sender, EventArgs e)
         {
             _addSpeechBubble = false;
-            //TitleText.Text = "add image";
             AddSpeechButton.IsEnabled = true;
             AddImageButton.IsEnabled = false; 
         }
@@ -110,7 +111,7 @@ namespace Toonify
         private void Export_Click(object sender, EventArgs e)
         {
             SaveImageToMediaLibrary();
-            MessageBox.Show("Page has been exported to your device's photos", "Export", MessageBoxButton.OK);
+            MessageBox.Show(Toonify.Resources.AppResources.PageHasBeenExported, Toonify.Resources.AppResources.ExportTitle, MessageBoxButton.OK);
         }
 
         private void Share_Click(object sender, EventArgs e)
@@ -223,7 +224,7 @@ namespace Toonify
 
         private void Delete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            if (MessageBox.Show(Toonify.Resources.AppResources.DeletePageAreYouSure, Toonify.Resources.AppResources.DeleteTitle, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 //delete image from isostore
                 using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
@@ -237,6 +238,28 @@ namespace Toonify
                 App.ViewModel.RemovePageItem(item);
 
                 NavigationService.GoBack();
+            }
+        }
+
+        private void WatermarkTB_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (SpeechBubbleTextbox.Text == _speechBubbleWatermark)
+            {
+                SpeechBubbleTextbox.Text = "";
+                SolidColorBrush Brush1 = new SolidColorBrush();
+                Brush1.Color = Colors.Magenta;
+                SpeechBubbleTextbox.Foreground = Brush1;
+            }
+        }
+
+        private void WatermarkTB_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (SpeechBubbleTextbox.Text == String.Empty)
+            {
+                SpeechBubbleTextbox.Text = _speechBubbleWatermark;
+                SolidColorBrush Brush2 = new SolidColorBrush();
+                Brush2.Color = Colors.Blue;
+                SpeechBubbleTextbox.Foreground = Brush2;
             }
         }
 
@@ -307,17 +330,17 @@ namespace Toonify
             //ApplicationBar.Buttons.Add(addImageButton);
 
             var exportButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.save.png", UriKind.Relative));
-            exportButton.Text = "export"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            exportButton.Text = Toonify.Resources.AppResources.ExportTitle;
             exportButton.Click += Export_Click;
             ApplicationBar.Buttons.Add(exportButton);
 
             var shareButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.message.send.png", UriKind.Relative));
-            shareButton.Text = "share"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            shareButton.Text = Toonify.Resources.AppResources.ShareTitle;
             shareButton.Click += Share_Click;
             ApplicationBar.Buttons.Add(shareButton);
 
             var deleteButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.delete.png", UriKind.Relative));
-            deleteButton.Text = "delete"; //MeetMeHere.Support.Resources.AppResources.AppBarRefreshButtonText;
+            deleteButton.Text = Toonify.Resources.AppResources.DeleteTitle;
             deleteButton.Click += Delete_Click;
             ApplicationBar.Buttons.Add(deleteButton);
         }

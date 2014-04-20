@@ -23,7 +23,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,0">
-            <TextBlock Text="Toonify" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
+                       Style="{StaticResource PhoneTextNormalStyle}"/>
             <!--<toolkit:ListPicker Name="EffectList" SelectionChanged="EffectList_SelectionChanged">
                 <toolkit:ListPickerItem Content="cartoon effect" Name="CartoonItem"/>
                 <toolkit:ListPickerItem Content="inked effect" Name="InkedItem"/>
@@ -44,16 +45,16 @@
 
             <Image Name="CartoonDisplay" Grid.Row="0" Grid.ColumnSpan="2"/>
             <Button Grid.Row="1" Grid.Column="0" Name="OkButton" Click="OkButton_Click">
-                <TextBlock Text="ok"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.OkButton, Source={StaticResource LocalizedStrings}}"/>
             </Button>
             <Button Grid.Row="1" Grid.Column="1" Name="CancelButton" Click="CancelButton_Click">
-                <TextBlock Text="cancel"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.CancelButton, Source={StaticResource LocalizedStrings}}"/>
             </Button>
         </Grid>
 
         <Grid Name="LoadingPanel" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.RowSpan="2">
             <Rectangle Fill="Gray" Height="100" Width="400"/>
-            <TextBlock Text="Loading..." VerticalAlignment="Center" HorizontalAlignment="Center" Name="LoadingMessage"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.LoadingText, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Center" HorizontalAlignment="Center" Name="LoadingMessage"/>
         </Grid>
     </Grid>
 

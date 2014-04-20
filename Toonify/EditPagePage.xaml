@@ -22,7 +22,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,12">
-            <TextBlock Text="Toonify" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
+                       Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -38,7 +39,7 @@
                     <ColumnDefinition Width="220"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="pick layout" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.SelectLayoutTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>
                 
                 <Button CommandParameter="Single" Grid.Row="1" Grid.Column="0" Click="LayoutButton_Click">
                     <Image Source="Assets/PageLayouts/Single.png"/>
@@ -67,10 +68,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Name="AddImageButton" Grid.Row="0" Grid.Column="0" IsEnabled="False" Click="AddImage_Click">
-                        <TextBlock Text="add image"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.AddImageMode, Source={StaticResource LocalizedStrings}}"/>
                     </Button>
                     <Button Name="AddSpeechButton" Grid.Row="0" Grid.Column="1" Click="AddSpeech_Click">
-                        <TextBlock Text="add speech"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.AddSpeechMode, Source={StaticResource LocalizedStrings}}"/>
                     </Button>
                 </Grid>
                 
@@ -80,14 +81,15 @@
             <Grid Name="TextDialog" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Visibility="Collapsed" Margin="0, 100, 0, 0">
                 <Rectangle Fill="Gray"></Rectangle>
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Enter text for speech bubble" Margin="12, 6, 0, 0"/>
-                    <TextBox Name="SpeechBubbleTextbox"/>
+                    <TextBlock Text="Enter text for speech bubble" Margin="12, 6, 0, 0" />
+                    <TextBox Name="SpeechBubbleTextbox" Text="{Binding Path=LocalizedResources.EnterSpeechBubbleTextWatermark, Source={StaticResource LocalizedStrings}}" 
+                             InputScope="Text" Grid.Row="2" Grid.ColumnSpan="2" Foreground="Gray" GotFocus="WatermarkTB_GotFocus" LostFocus="WatermarkTB_LostFocus"/>
                     <StackPanel Orientation="Horizontal">
                         <Button Name="SpeechOkButton" Click="SpeechOkButton_Click">
-                            <TextBlock Text="ok"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.OkButton, Source={StaticResource LocalizedStrings}}"/>
                         </Button>
                         <Button Name="SpeechCancelButton" Click="SpeechCancelButton_Click">
-                            <TextBlock Text="cancel"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.CancelButton, Source={StaticResource LocalizedStrings}}"/>
                         </Button>
                     </StackPanel>
                 </StackPanel>

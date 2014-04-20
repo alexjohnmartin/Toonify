@@ -152,4 +152,92 @@
     <value>About</value>
     <comment>About page - title</comment>
   </data>
+  <data name="AddImageMode" xml:space="preserve">
+    <value>Add image</value>
+    <comment>Editing a comic page - this mode allows the user to add images to the page</comment>
+  </data>
+  <data name="AddSpeechMode" xml:space="preserve">
+    <value>Add speech</value>
+    <comment>Editing a comic page - this mode allows the user to add speech bubbles to the page</comment>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DeletePageAreYouSure" xml:space="preserve">
+    <value>Are you sure you want to delete this page?</value>
+  </data>
+  <data name="DeleteTitle" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EnterSpeechBubbleTextWatermark" xml:space="preserve">
+    <value>Enter text for speech bubble</value>
+    <comment>Editing a comic page - this is the watermark text shown in the text-box for adding speech bubble text</comment>
+  </data>
+  <data name="ErrorConvertingImage" xml:space="preserve">
+    <value>There was an error converting this image</value>
+    <comment>Error message shown if there was an error when converting an image to a cartoon</comment>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+    <comment>Error message title text</comment>
+  </data>
+  <data name="ExportTitle" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ImagesHeader" xml:space="preserve">
+    <value>Images</value>
+    <comment>Page header - imported images</comment>
+  </data>
+  <data name="ImportImageButton" xml:space="preserve">
+    <value>Import image</value>
+    <comment>Button to import an image to the app</comment>
+  </data>
+  <data name="ImportImageTitle" xml:space="preserve">
+    <value>Pick image</value>
+    <comment>Page title to pick an image from the device to import and use on a comic</comment>
+  </data>
+  <data name="LoadingText" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewPageButton" xml:space="preserve">
+    <value>Create new page</value>
+    <comment>Button to create a new comic page</comment>
+  </data>
+  <data name="OkButton" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="OutOfMemoryError" xml:space="preserve">
+    <value>Out of memory, your device may not be powerful enough</value>
+    <comment>Error message shown if the device runs out of memory</comment>
+  </data>
+  <data name="PageHasBeenExported" xml:space="preserve">
+    <value>Page has been exported to your device's photos</value>
+  </data>
+  <data name="PagesHeader" xml:space="preserve">
+    <value>Pages</value>
+    <comment>Page header - comic pages</comment>
+  </data>
+  <data name="PickImageTitle" xml:space="preserve">
+    <value>Select image</value>
+    <comment>Page title - select a comic image to use on a page</comment>
+  </data>
+  <data name="SelectLayoutTitle" xml:space="preserve">
+    <value>Pick a layout</value>
+    <comment>Pick-a-layout page title - this page allows the user to select a comic page layout</comment>
+  </data>
+  <data name="ShareTitle" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="TakePhotoButton" xml:space="preserve">
+    <value>Take photo</value>
+    <comment>Button to take a photo for the app</comment>
+  </data>
+  <data name="TutorialTextCreatePages" xml:space="preserve">
+    <value>Now create new pages and add your images</value>
+    <comment>Tutorial text to guide the user through using the app - 2nd they can use images on comic pages</comment>
+  </data>
+  <data name="TutorialTextImportImages" xml:space="preserve">
+    <value>First add import some images or take some photos</value>
+    <comment>Tutorial text to guide the user through using the app - 1st they need to import some photos into the app</comment>
+  </data>
 </root>

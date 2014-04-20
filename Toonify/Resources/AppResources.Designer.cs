@@ -115,11 +115,182 @@ namespace Toonify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add image.
+        /// </summary>
+        public static string AddImageMode {
+            get {
+                return ResourceManager.GetString("AddImageMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add speech.
+        /// </summary>
+        public static string AddSpeechMode {
+            get {
+                return ResourceManager.GetString("AddSpeechMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toonify.
         /// </summary>
         public static string ApplicationTitle {
             get {
                 return ResourceManager.GetString("ApplicationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CancelButton {
+            get {
+                return ResourceManager.GetString("CancelButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this page?.
+        /// </summary>
+        public static string DeletePageAreYouSure {
+            get {
+                return ResourceManager.GetString("DeletePageAreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string DeleteTitle {
+            get {
+                return ResourceManager.GetString("DeleteTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter text for speech bubble.
+        /// </summary>
+        public static string EnterSpeechBubbleTextWatermark {
+            get {
+                return ResourceManager.GetString("EnterSpeechBubbleTextWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error converting this image.
+        /// </summary>
+        public static string ErrorConvertingImage {
+            get {
+                return ResourceManager.GetString("ErrorConvertingImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string ErrorTitle {
+            get {
+                return ResourceManager.GetString("ErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string ExportTitle {
+            get {
+                return ResourceManager.GetString("ExportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Images.
+        /// </summary>
+        public static string ImagesHeader {
+            get {
+                return ResourceManager.GetString("ImagesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import image.
+        /// </summary>
+        public static string ImportImageButton {
+            get {
+                return ResourceManager.GetString("ImportImageButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick image.
+        /// </summary>
+        public static string ImportImageTitle {
+            get {
+                return ResourceManager.GetString("ImportImageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string LoadingText {
+            get {
+                return ResourceManager.GetString("LoadingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new page.
+        /// </summary>
+        public static string NewPageButton {
+            get {
+                return ResourceManager.GetString("NewPageButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string OkButton {
+            get {
+                return ResourceManager.GetString("OkButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Out of memory, your device may not be powerful enough.
+        /// </summary>
+        public static string OutOfMemoryError {
+            get {
+                return ResourceManager.GetString("OutOfMemoryError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page has been exported to your device&apos;s photos.
+        /// </summary>
+        public static string PageHasBeenExported {
+            get {
+                return ResourceManager.GetString("PageHasBeenExported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pages.
+        /// </summary>
+        public static string PagesHeader {
+            get {
+                return ResourceManager.GetString("PagesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select image.
+        /// </summary>
+        public static string PickImageTitle {
+            get {
+                return ResourceManager.GetString("PickImageTitle", resourceCulture);
             }
         }
         
@@ -138,6 +309,51 @@ namespace Toonify.Resources {
         public static string ResourceLanguage {
             get {
                 return ResourceManager.GetString("ResourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick a layout.
+        /// </summary>
+        public static string SelectLayoutTitle {
+            get {
+                return ResourceManager.GetString("SelectLayoutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share.
+        /// </summary>
+        public static string ShareTitle {
+            get {
+                return ResourceManager.GetString("ShareTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Take photo.
+        /// </summary>
+        public static string TakePhotoButton {
+            get {
+                return ResourceManager.GetString("TakePhotoButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Now create new pages and add your images.
+        /// </summary>
+        public static string TutorialTextCreatePages {
+            get {
+                return ResourceManager.GetString("TutorialTextCreatePages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First add import some images or take some photos.
+        /// </summary>
+        public static string TutorialTextImportImages {
+            get {
+                return ResourceManager.GetString("TutorialTextImportImages", resourceCulture);
             }
         }
     }
