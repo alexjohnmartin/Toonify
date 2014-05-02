@@ -223,7 +223,7 @@
             </phone:PanoramaItem>
 
             <phone:PanoramaItem Header="{Binding Path=LocalizedResources.AboutHeader, Source={StaticResource LocalizedStrings}}">
-                <Grid x:Name="AboutPanel" Grid.Row="1" Margin="0,-40,0,0">
+                <Grid x:Name="AboutPanel" Grid.Row="1" Margin="0,-30,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -244,13 +244,6 @@
                                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                TextWrapping="Wrap" Margin="12, 0, 0, 0"/>
 
-                    <!--<Button Name="TwitterButton" Click="TwitterButton_Click" Background="Red" BorderThickness="0" Grid.Column="0" Grid.Row="1">
-                        <StackPanel>
-                            <Image Source="Assets/About/appbar.social.twitter.png" MaxHeight="120" />
-                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonTwitter, Source={StaticResource LocalizedStrings}}" />
-                        </StackPanel>
-                    </Button>-->
-
                     <Button Name="ReviewButton" Click="ReviewButton_Click" Background="OrangeRed" BorderThickness="0" Grid.Column="1" Grid.Row="2">
                         <StackPanel>
                             <Image Source="Assets/About/appbar.message.smiley.png" MaxHeight="120" />
@@ -265,12 +258,19 @@
                         </StackPanel>
                     </Button>
 
-                    <!--<Button Name="StoreButton" Click="StoreButton_Click" Background="Green" BorderThickness="0" Grid.Column="1" Grid.Row="2">
+                    <Button Name="PinButton" Click="PinButton_Click" Background="Red" BorderThickness="0" Grid.Column="0" Grid.Row="3">
+                        <StackPanel>
+                            <Image Source="Assets/About/appbar.pin.png" MaxHeight="120" />
+                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonPin, Source={StaticResource LocalizedStrings}}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="StoreButton" Click="StoreButton_Click" Background="Green" BorderThickness="0" Grid.Column="1" Grid.Row="3">
                         <StackPanel>
                             <Image Source="Assets/About/appbar.marketplace.png" MaxHeight="120" />
                             <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonStore, Source={StaticResource LocalizedStrings}}" />
                         </StackPanel>
-                    </Button>-->
+                    </Button>
                 </Grid>
             </phone:PanoramaItem>
         </phone:Panorama>

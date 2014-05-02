@@ -70,6 +70,15 @@ namespace Toonify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pin to home.
+        /// </summary>
+        public static string AboutButtonPin {
+            get {
+                return ResourceManager.GetString("AboutButtonPin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Review.
         /// </summary>
         public static string AboutButtonReview {

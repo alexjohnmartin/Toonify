@@ -143,6 +143,8 @@ namespace Toonify
             VersionTextBox.Text = XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("Version").Value;
             ReviewButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
             EmailButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
+            StoreButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
+            PinButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
         }
 
         private void UpdateTutorialText()
@@ -173,6 +175,36 @@ namespace Toonify
             task.ContentIdentifier = button.Tag.ToString();
             task.ContentType = MarketplaceContentType.Applications;
             task.Show();
+        }
+
+        private void PinButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var tile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains("MainPage.xaml"));
+                if (tile == null)
+                {
+                    MessageBox.Show("Tile doesn't exist, creating", "Info", MessageBoxButton.OK);
+                    ShellTile.Create(new Uri("/MainPage.xaml?test=true", UriKind.Relative), GetTileData(), true);
+                }
+                else
+                {
+                    MessageBox.Show("Tile already exists", "Info", MessageBoxButton.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK);
+            }
+        }
+
+        private ShellTileData GetTileData()
+        {
+            var data = new FlipTileData();
+            data.BackgroundImage = new Uri(@"/Assets/Tiles/NormalTile.png", UriKind.Relative);
+            data.WideBackgroundImage = new Uri(@"/Assets/Tiles/WideTile.png", UriKind.Relative);
+            data.Title = Toonify.Resources.AppResources.ApplicationTitle;
+            return data;
         }
     }
 }

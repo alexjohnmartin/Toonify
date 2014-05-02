@@ -240,4 +240,7 @@
     <value>First add import some images or take some photos</value>
     <comment>Tutorial text to guide the user through using the app - 1st they need to import some photos into the app</comment>
   </data>
+  <data name="AboutButtonPin" xml:space="preserve">
+    <value>Pin to home</value>
+  </data>
 </root>
