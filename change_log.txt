@@ -2,3 +2,4 @@ Change_log
 
 1.3.0.0 - fixes for crashing when import/taking photo
 1.3.1.0 - minor fix to the text - title was wrong on 1 of the support pages
+1.4.0.0 - fixed email address, added 'other apps' and pin-to-home option on about page
