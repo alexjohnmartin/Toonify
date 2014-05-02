@@ -151,6 +151,11 @@
     <Content Include="Assets\AppBar\appbar.delete.png" />
     <Content Include="Assets\AppBar\appbar.image.beach.png" />
     <Content Include="Assets\ApplicationIconBlack.png" />
+    <Content Include="Assets\OtherApps\calendar-tile.png" />
+    <Content Include="Assets\OtherApps\meet-me-here.png" />
+    <Content Include="Assets\OtherApps\toonify.png" />
+    <Content Include="Assets\OtherApps\trail-mapper.png" />
+    <Content Include="Assets\OtherApps\your-music-shuffled.png" />
     <Content Include="Assets\PanoramaBackgroundWhite.png" />
     <Content Include="Assets\Tiles\NormalTile.png" />
     <Content Include="Assets\Tiles\SmallTile.png" />
@@ -202,6 +207,7 @@
       <HintPath>..\packages\WriteableBitmapEx.1.0.12.0\lib\WindowsPhone8\WriteableBitmapExWinPhoneXnaDependant.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

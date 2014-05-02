@@ -8,6 +8,8 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
+using System.Windows.Media;
+using System.Xml.Linq;
 
 namespace Toonify
 {
@@ -34,7 +36,8 @@ namespace Toonify
                 App.ViewModel.LoadData();
             }
 
-            UpdateTutorialText(); 
+            UpdateTutorialText();
+            UpdateButtonColor();
         }
 
         protected void cameraCaptureTask_Completed(object sender, PhotoResult e)
@@ -91,6 +94,7 @@ namespace Toonify
         public void EmailButton_Click(object sender, EventArgs e)
         {
             var email = new EmailComposeTask();
+            email.To = "alexmartin9999@hotmail.com";
             email.Subject = "Feedback for the Calendar Tile application";
             email.Show();
         }
@@ -134,6 +138,13 @@ namespace Toonify
             ImageHelper.Share(imageItem); 
         }
 
+        private void UpdateButtonColor()
+        {
+            VersionTextBox.Text = XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("Version").Value;
+            ReviewButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
+            EmailButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
+        }
+
         private void UpdateTutorialText()
         {
             bool anyPages = App.ViewModel.PageItems.Any();
@@ -153,6 +164,15 @@ namespace Toonify
                 PageTutorialText.Text = Toonify.Resources.AppResources.TutorialTextCreatePages;
                 ImageTutorialText.Text = Toonify.Resources.AppResources.TutorialTextCreatePages;
             }
+        }
+
+        private void AppButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var task = new MarketplaceDetailTask();
+            task.ContentIdentifier = button.Tag.ToString();
+            task.ContentType = MarketplaceContentType.Applications;
+            task.Show();
         }
     }
 }
