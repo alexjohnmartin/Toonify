@@ -179,23 +179,9 @@ namespace Toonify
 
         private void PinButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var tile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains("MainPage.xaml"));
-                if (tile == null)
-                {
-                    MessageBox.Show("Tile doesn't exist, creating", "Info", MessageBoxButton.OK);
-                    ShellTile.Create(new Uri("/MainPage.xaml?test=true", UriKind.Relative), GetTileData(), true);
-                }
-                else
-                {
-                    MessageBox.Show("Tile already exists", "Info", MessageBoxButton.OK);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK);
-            }
+            var tile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains("MainPage.xaml"));
+            if (tile == null)
+                ShellTile.Create(new Uri("/MainPage.xaml?test=true", UriKind.Relative), GetTileData(), true);
         }
 
         private ShellTileData GetTileData()
