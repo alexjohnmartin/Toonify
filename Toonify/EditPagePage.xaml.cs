@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using Nokia.Graphics.Imaging;
 using BugSense;
+using Nokia.InteropServices.WindowsRuntime;
 
 namespace Toonify
 {
@@ -90,10 +91,10 @@ namespace Toonify
                 PagePanel.Visibility = System.Windows.Visibility.Visible;
                 TextDialog.Visibility = System.Windows.Visibility.Collapsed;
                 _addSpeechBubble = false;
-                PageImage.Source = _pageImage; 
+                PageImage.Source = new WriteableBitmap(_pageImage);
             }
 
-            PageImage.Source = _pageImage; 
+            PageImage.Source = new WriteableBitmap(_pageImage);
         }
 
         protected void AddSpeech_Click(object sender, EventArgs e)
@@ -424,10 +425,45 @@ namespace Toonify
                     offsetTop = (selectedImage.PixelHeight - selectedImageHeight) / 2;
                 }
 
-                _pageImage.Blit(new Rect(left, top, width, height),
-                                selectedImage,
-                                new Rect(offsetLeft, offsetTop, selectedImageWidth, selectedImageHeight));
-                PageImage.Source = _pageImage;
+                //re-frame the selected image to correct proportions
+                var reframedPic = new WriteableBitmap(width, height);
+                using (var imageSource = new BitmapImageSource(selectedImage.AsBitmap()))
+                using (var reframeEffect = new FilterEffect(imageSource))
+                {
+                    var imageInfo = await imageSource.GetInfoAsync();
+                    var filter = new ReframingFilter();
+
+                    filter.ReframingArea = new Windows.Foundation.Rect(offsetLeft, offsetTop, selectedImageWidth, selectedImageHeight);
+                    filter.Angle = 0;
+                    reframeEffect.Filters = new IFilter[] { filter };
+                    var finalRenderer = new WriteableBitmapRenderer(reframeEffect, reframedPic);
+                    await finalRenderer.RenderAsync();
+                }
+
+                using (var backgroundSource = new BitmapImageSource(_pageImage.AsBitmap()))
+                using (var foregroundImageSource = new BitmapImageSource(reframedPic.AsBitmap()))
+                using (var filterEffect = new FilterEffect(backgroundSource))
+                using (var blendFilter = new BlendFilter(foregroundImageSource))
+                {
+                    blendFilter.BlendFunction = BlendFunction.Normal;
+                    blendFilter.TargetArea = new Windows.Foundation.Rect(
+                        ((double)left) / ((double)_pageImage.PixelWidth),
+                        ((double)top) / ((double)_pageImage.PixelHeight),
+                        ((double)width) / ((double)_pageImage.PixelWidth),
+                        ((double)height) / ((double)_pageImage.PixelHeight));
+                    blendFilter.TargetAreaRotation = 0;
+                    blendFilter.TargetOutputOption = OutputOption.Stretch;
+
+                    filterEffect.Filters = new IFilter[] { blendFilter };
+
+                    var finalRenderer = new WriteableBitmapRenderer(filterEffect, _pageImage);
+                    await finalRenderer.RenderAsync();
+                }
+
+                //_pageImage.Blit(new Rect(left, top, width, height),
+                //                selectedImage,
+                //                new Rect(offsetLeft, offsetTop, selectedImageWidth, selectedImageHeight));
+                Deployment.Current.Dispatcher.BeginInvoke(() => { PageImage.Source = _pageImage; });
             }
             catch (Exception ex)
             {
@@ -484,6 +520,7 @@ namespace Toonify
                 default:
                     throw new NotImplementedException();
             }
+            Deployment.Current.Dispatcher.BeginInvoke(() => { PageImage.Source = _pageImage; });
         }
 
         private void DrawBlankFourPage()

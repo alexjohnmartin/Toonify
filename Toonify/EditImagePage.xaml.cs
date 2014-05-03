@@ -93,6 +93,7 @@ namespace Toonify
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message, "Error loading image", MessageBoxButton.OK);
+                BugSenseHandler.Instance.LogException(ex);
                 LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
@@ -249,10 +250,13 @@ namespace Toonify
 
                 await RenderFinalImage(sketchEffect, cartoonEffect);
 
-                CartoonDisplay.Source = _finalImageBitmap;
-                OkButton.IsEnabled = true;
-                CancelButton.IsEnabled = true;
-                LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        CartoonDisplay.Source = _finalImageBitmap;
+                        OkButton.IsEnabled = true;
+                        CancelButton.IsEnabled = true;
+                        LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    });
             }
             catch (OutOfMemoryException exception)
             {
