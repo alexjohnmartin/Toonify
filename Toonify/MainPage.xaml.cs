@@ -10,6 +10,7 @@ using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using System.Windows.Media;
 using System.Xml.Linq;
+using BugSense;
 
 namespace Toonify
 {
@@ -31,8 +32,10 @@ namespace Toonify
         // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - navigated to");
             if (!App.ViewModel.IsDataLoaded)
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - loading data");
                 App.ViewModel.LoadData();
             }
 
@@ -42,6 +45,7 @@ namespace Toonify
 
         protected void cameraCaptureTask_Completed(object sender, PhotoResult e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - photo taken");
             if (e.TaskResult == TaskResult.OK)
             {
                 var fullPath = e.OriginalFileName;
@@ -52,6 +56,7 @@ namespace Toonify
 
         private void TakePhotoButton_Click(object sender, RoutedEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - start camera task");
             cameraCaptureTask.Show(); 
         }
 
@@ -67,6 +72,7 @@ namespace Toonify
 
         public void TwitterButton_Click(object sender, EventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - twitter");
             var task = new WebBrowserTask
             {
                 Uri = new Uri("https://twitter.com/AlexJohnMartin", UriKind.Absolute)
@@ -76,6 +82,7 @@ namespace Toonify
 
         public void StoreButton_Click(object sender, EventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - store");
             var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
             var task = new WebBrowserTask
             {
@@ -86,6 +93,7 @@ namespace Toonify
 
         public void ReviewButton_Click(object sender, EventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - review");
             //FeedbackHelper.Default.Reviewed();
             var marketplace = new MarketplaceReviewTask();
             marketplace.Show();
@@ -93,6 +101,7 @@ namespace Toonify
 
         public void EmailButton_Click(object sender, EventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - email");
             var email = new EmailComposeTask();
             email.To = "alexmartin9999@hotmail.com";
             email.Subject = "Feedback for the Calendar Tile application";
@@ -119,6 +128,7 @@ namespace Toonify
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - export");
             var menuItem = (MenuItem)sender;
             var imageItem = (ImageItem)menuItem.Tag;
             ImageHelper.SaveImageToMediaLibrary(imageItem); 
@@ -126,6 +136,7 @@ namespace Toonify
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - delete");
             var menuItem = (MenuItem)sender;
             var imageItem = (ImageItem)menuItem.Tag; 
             ImageHelper.Delete(imageItem); 
@@ -133,6 +144,7 @@ namespace Toonify
 
         private void Share_Click(object sender, RoutedEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - share");
             var menuItem = (MenuItem)sender;
             var imageItem = (ImageItem)menuItem.Tag;
             ImageHelper.Share(imageItem); 
@@ -170,15 +182,18 @@ namespace Toonify
 
         private void AppButton_Click(object sender, RoutedEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - other app...");
             var button = (Button)sender;
             var task = new MarketplaceDetailTask();
             task.ContentIdentifier = button.Tag.ToString();
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - ..." + button.Tag.ToString());
             task.ContentType = MarketplaceContentType.Applications;
             task.Show();
         }
 
         private void PinButton_Click(object sender, RoutedEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - pin to home screen");
             var tile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains("MainPage.xaml"));
             if (tile == null)
                 ShellTile.Create(new Uri("/MainPage.xaml?test=true", UriKind.Relative), GetTileData(), true);
@@ -186,6 +201,7 @@ namespace Toonify
 
         private ShellTileData GetTileData()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - get tile data");
             var data = new FlipTileData();
             data.BackgroundImage = new Uri(@"/Assets/Tiles/NormalTile.png", UriKind.Relative);
             data.WideBackgroundImage = new Uri(@"/Assets/Tiles/WideTile.png", UriKind.Relative);

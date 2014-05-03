@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Media;
 using System.IO;
 using Windows.UI;
 using System.Windows.Media;
+using BugSense;
 
 namespace Toonify
 {
@@ -29,6 +30,7 @@ namespace Toonify
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            BugSenseHandler.Instance.LeaveBreadCrumb("StripBackgroundPage - navigated to");
 
             var imageName = string.Empty;
             if (!NavigationContext.QueryString.TryGetValue("name", out imageName)) return;
@@ -46,6 +48,7 @@ namespace Toonify
                             var pic = album.Pictures.Where(p => p.Name.Equals(imageName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
                             if (pic != null)
                             {
+                                BugSenseHandler.Instance.LeaveBreadCrumb("StripBackgroundPage - showing image");
                                 _thumbnailImageBitmap = new WriteableBitmap(pic.Width, pic.Height);
                                 _thumbnailImageBitmap.SetSource(pic.GetImage());
                                 BeginImage.Source = _thumbnailImageBitmap;
@@ -60,6 +63,7 @@ namespace Toonify
 
         private async void CreateCartoonImage(Stream chosenPhoto, int width, int height, Windows.UI.Color color)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("StripBackgroundPage - stripping background");
             _cartoonImageBitmap = new WriteableBitmap(width, height);
 
             try
@@ -91,6 +95,7 @@ namespace Toonify
 
         private void BeginImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("StripBackgroundPage - image tapped");
             var tapPosition = e.GetPosition(BeginImage);
             double zoom = GetZoomLevelOfOriginalImage();
             double x = (double)tapPosition.X;

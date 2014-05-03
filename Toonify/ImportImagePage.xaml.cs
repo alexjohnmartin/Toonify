@@ -13,6 +13,7 @@ using Microsoft.Phone;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.IO;
+using BugSense;
 
 namespace Toonify
 {
@@ -36,6 +37,7 @@ namespace Toonify
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("ImportImagePage - navigated to");
             base.OnNavigatedTo(e);
 
             LoadImagesFromMediaLibrary();
@@ -43,6 +45,7 @@ namespace Toonify
 
         private void LoadImagesFromMediaLibrary()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("ImportImagePage - load images from library");
             //_listOfImages = new ObservableCollection<ImageItem>(); 
             try
             {
@@ -70,12 +73,14 @@ namespace Toonify
             }
             catch (Exception ex)
             {
+                BugSenseHandler.Instance.LogException(ex);
                 //MessageBox.Show(ex.Message, "Error selecting image", MessageBoxButton.OK);
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("ImportImagePage - image selected");
             var button = (Button)e.OriginalSource;
             NavigationService.Navigate(new Uri("/EditImagePage.xaml?name=" + button.CommandParameter, UriKind.Relative));
             //NavigationService.Navigate(new Uri("/StripBackgroundPage.xaml?name=" + button.CommandParameter, UriKind.Relative)); 

@@ -16,6 +16,7 @@ using Microsoft.Phone.Tasks;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using Nokia.Graphics.Imaging;
+using BugSense;
 
 namespace Toonify
 {
@@ -49,7 +50,7 @@ namespace Toonify
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - navigated to");
             AddImage_Click(null, null); 
 
             var dummy = string.Empty; 
@@ -57,6 +58,7 @@ namespace Toonify
 
             if (!string.IsNullOrEmpty(App.ViewModel.SelectedImageName))
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - adding image to page");
                 AddImageToPage(App.ViewModel.SelectedImageName);
                 SavePage();
                 BuildApplicationBar();
@@ -64,6 +66,7 @@ namespace Toonify
             }
             else if (newPage)
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - new page");
                 PageLayoutPanel.Visibility = System.Windows.Visibility.Visible;
                 PagePanel.Visibility = System.Windows.Visibility.Collapsed;
                 TextDialog.Visibility = System.Windows.Visibility.Collapsed;
@@ -73,6 +76,7 @@ namespace Toonify
             }
             else if (NavigationContext.QueryString.TryGetValue("edit", out _pageFileName))
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - edit existing page");
                 //load previously made page
                 BuildApplicationBar();
 
@@ -110,12 +114,14 @@ namespace Toonify
 
         private void Export_Click(object sender, EventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - export");
             SaveImageToMediaLibrary();
             MessageBox.Show(Toonify.Resources.AppResources.PageHasBeenExported, Toonify.Resources.AppResources.ExportTitle, MessageBoxButton.OK);
         }
 
         private void Share_Click(object sender, EventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - share");
             var shareTask = new ShareMediaTask();
             shareTask.FilePath = SaveImageToMediaLibrary();
             shareTask.Show(); 
@@ -123,6 +129,7 @@ namespace Toonify
 
         private void PageImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - image tap");
             var tapPosition = e.GetPosition(PageImage);
 
             if (_addSpeechBubble)
@@ -226,6 +233,7 @@ namespace Toonify
         {
             if (MessageBox.Show(Toonify.Resources.AppResources.DeletePageAreYouSure, Toonify.Resources.AppResources.DeleteTitle, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - delete image");
                 //delete image from isostore
                 using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
                 {
@@ -265,6 +273,7 @@ namespace Toonify
 
         private string SaveImageToMediaLibrary()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - save image to media library");
             using (MemoryStream stream = new MemoryStream())
             {
                 _pageImage.SaveJpeg(stream, _pageImage.PixelWidth, _pageImage.PixelHeight, 0, 100);
@@ -288,6 +297,7 @@ namespace Toonify
         {
             try
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - load image from iso storage");
                 using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     if (iso.FileExists(_pageFileName))
@@ -366,6 +376,7 @@ namespace Toonify
 
         private IEnumerable<ImageItem> LoadImageItems()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - load image items");
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 foreach (var file in store.GetFileNames("image_*"))
@@ -379,6 +390,7 @@ namespace Toonify
 
         private async void AddImageToPage(string imageName)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - add image to page");
             //image selected
             var selectedImage = App.ViewModel.ImageItems.FirstOrDefault(i => i.Name.Equals(imageName, StringComparison.InvariantCultureIgnoreCase)).Image;
             if (selectedImage == null)
@@ -419,12 +431,14 @@ namespace Toonify
             }
             catch (Exception ex)
             {
+                BugSenseHandler.Instance.LogException(ex);
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK);
             }
         }
 
         private void SavePage()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - save page");
             using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 if (iso.FileExists(_pageFileName))
@@ -474,6 +488,7 @@ namespace Toonify
 
         private void DrawBlankFourPage()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - draw 4 panel page");
             var centreX = DefaultWidth / 2;
             var centreY = DefaultHeight / 2;
             var halfMargin = DefaultPageMargin / 2;
@@ -490,6 +505,7 @@ namespace Toonify
 
         private void DrawBlankTriplePage()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - draw triple panel page");
             var centreX = DefaultWidth / 2;
             var thirdHeight = DefaultHeight / 3;
             _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
@@ -503,6 +519,7 @@ namespace Toonify
 
         private void DrawBlankDoublePage()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - draw double panel page");
             var centreX = DefaultWidth / 2;
             var centreY = DefaultHeight / 2;
             _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
@@ -514,6 +531,7 @@ namespace Toonify
 
         private void DrawBlankSinglePage()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - draw single panel page");
             var centreX = DefaultWidth / 2;
             var centreY = DefaultHeight / 2;
             _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
@@ -523,6 +541,7 @@ namespace Toonify
 
         private void DrawAddIcon(int centreX, int centreY)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - draw add icon");
             _pageImage.FillEllipseCentered(centreX, centreY, 70, 70, Colors.Gray);
             _pageImage.FillRectangle(centreX - 10, centreY - 50, centreX + 10, centreY + 50, Colors.White);
             _pageImage.FillRectangle(centreX - 50, centreY - 10, centreX + 50, centreY + 10, Colors.White);
@@ -530,6 +549,7 @@ namespace Toonify
 
         private void DrawSpeechBubble()
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - draw speech bubble");
             var zoom = 0d;
             var aspectRatioOriginal = (double)width / (double)height;
             var aspectRatioImport = (double)_pageImage.PixelWidth / (double)_pageImage.PixelHeight;
@@ -566,6 +586,7 @@ namespace Toonify
     {
         internal static void DrawText(this WriteableBitmap wbm, string text, Color color, int fontSize, int x, int y)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditPagePage - WritableBitmapExtensions - draw text");
             TextBlock tb = new TextBlock();
             tb.FontSize = fontSize;
             tb.FontWeight = FontWeights.ExtraBold;

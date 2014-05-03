@@ -10,6 +10,8 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Toonify.Resources;
 using Toonify.ViewModels;
+using BugSense;
+using BugSense.Core.Model;
 
 namespace Toonify
 {
@@ -44,8 +46,11 @@ namespace Toonify
         /// </summary>
         public App()
         {
+            // Initialize BugSense
+            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), RootFrame, "7c390d0f");
+            BugSenseHandler.Instance.LeaveBreadCrumb("App initialize");
             // Global handler for uncaught exceptions.
-            UnhandledException += Application_UnhandledException;
+            //UnhandledException += Application_UnhandledException;
 
             // Standard XAML initialization
             InitializeComponent();

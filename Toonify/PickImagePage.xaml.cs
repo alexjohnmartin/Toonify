@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.IsolatedStorage;
+using BugSense;
 
 namespace Toonify
 {
@@ -25,8 +26,15 @@ namespace Toonify
             DataContext = App.ViewModel;
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            BugSenseHandler.Instance.LeaveBreadCrumb("PickImagePage - navigated to");
+        }
+
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("PickImagePage - image selected");
             var image = (Image)e.OriginalSource;
             App.ViewModel.SelectedImageName = image.Tag.ToString(); 
             NavigationService.GoBack();

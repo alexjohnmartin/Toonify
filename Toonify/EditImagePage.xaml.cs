@@ -14,6 +14,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Xna.Framework.Media;
 using System.IO.IsolatedStorage;
+using BugSense;
 
 namespace Toonify
 {
@@ -43,6 +44,7 @@ namespace Toonify
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditImagePage - navigated to");
             EffectList.SelectedIndex = (int)_settings["EffectListIndex"]; 
 
             _filename = string.Empty;
@@ -59,6 +61,7 @@ namespace Toonify
         {
             try
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("EditImagePage - convert and display image");
                 foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
                 {
                     if (source.MediaSourceType == MediaSourceType.LocalDevice)
@@ -212,6 +215,7 @@ namespace Toonify
         {
             try
             {
+                BugSenseHandler.Instance.LeaveBreadCrumb("EditImagePage - create combined image");
                 // Rewind stream to start.                     
                 chosenPhoto.Position = 0;
                 var imageStream = new StreamImageSource(chosenPhoto);
@@ -250,13 +254,15 @@ namespace Toonify
                 CancelButton.IsEnabled = true;
                 LoadingPanel.Visibility = System.Windows.Visibility.Collapsed;
             }
-            catch (OutOfMemoryException)
+            catch (OutOfMemoryException exception)
             {
+                BugSenseHandler.Instance.LogException(exception);
                 MessageBox.Show(Toonify.Resources.AppResources.OutOfMemoryError, Toonify.Resources.AppResources.ErrorTitle, MessageBoxButton.OK);
                 NavigateBackToHomeScreen();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                BugSenseHandler.Instance.LogException(exception);
                 MessageBox.Show(Toonify.Resources.AppResources.ErrorConvertingImage, Toonify.Resources.AppResources.ErrorTitle, MessageBoxButton.OK);
                 NavigationService.GoBack();
             }
@@ -346,6 +352,7 @@ namespace Toonify
 
         private void SaveImage(WriteableBitmap bitmap)
         {
+            BugSenseHandler.Instance.LeaveBreadCrumb("EditImagePage - save image");
             var fileStream = new MemoryStream();
             bitmap.SaveJpeg(fileStream, bitmap.PixelWidth, bitmap.PixelHeight, 100, 100);
             fileStream.Seek(0, SeekOrigin.Begin);
