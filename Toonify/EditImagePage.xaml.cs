@@ -24,7 +24,7 @@ namespace Toonify
         private const int DefaultWidth = 600;
         private const int DefaultHeight = 800;
 
-        //private bool _pageLoaded = false; 
+        private bool _pageLoaded = false; 
         private string _filename = string.Empty;
         private IsolatedStorageSettings _settings;
         private WriteableBitmap _finalImageBitmap = null;
@@ -43,7 +43,7 @@ namespace Toonify
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            //EffectList.SelectedIndex = (int)_settings["EffectListIndex"]; 
+            EffectList.SelectedIndex = (int)_settings["EffectListIndex"]; 
 
             _filename = string.Empty;
             if (!NavigationContext.QueryString.TryGetValue("name", out _filename)) return;
@@ -52,7 +52,7 @@ namespace Toonify
             CancelButton.IsEnabled = false;
             LoadingPanel.Visibility = System.Windows.Visibility.Visible;
             ConvertAndDisplayImage();
-            //_pageLoaded = true;
+            _pageLoaded = true;
         }
 
         private void ConvertAndDisplayImage()
@@ -72,18 +72,15 @@ namespace Toonify
                                 var pic = album.Pictures.FirstOrDefault(p => p.Name.Equals(_filename, StringComparison.InvariantCultureIgnoreCase));
                                 if (pic != null)
                                 {
-                                    //switch (EffectList.SelectedIndex)
-                                    //{
-                                    //    case 0:
-                                    //        CreateCartoonImage(pic.GetImage(), pic.Width, pic.Height);
-                                    //        break;
-                                    //    case 1:
-                                    //        CreateInkedImage(pic.GetImage(), pic.Width, pic.Height);
-                                    //        break;
-                                    //    case 2:
-                                    CreateCombinedImage(pic.GetImage(), pic.Width, pic.Height);
-                                    //        break;
-                                    //}
+                                    switch (EffectList.SelectedIndex)
+                                    {
+                                        case 0:
+                                            CreateCombinedImage(pic.GetImage(), pic.Width, pic.Height, true);
+                                            break;
+                                        case 1:
+                                            CreateCombinedImage(pic.GetImage(), pic.Width, pic.Height, false);
+                                            break;
+                                    }
                                 }
                             }
                         }
@@ -211,7 +208,7 @@ namespace Toonify
         //    }
         //}
 
-        private async void CreateCombinedImage(Stream chosenPhoto, int width, int height)
+        private async void CreateCombinedImage(Stream chosenPhoto, int width, int height, bool coloured)
         {
             try
             {
@@ -239,8 +236,13 @@ namespace Toonify
                 _cartoonImageBitmap = new WriteableBitmap(selectedImageWidth, selectedImageHeight);
 
                 // A cartoon effect is initialized with selected image stream as source.
-                var sketchEffect = await RenderSketchImage(imageStream);
-                var cartoonEffect = await RenderCartoonImage(imageStream);
+                var sketchEffect = await RenderInkedImage(imageStream);
+                FilterEffect cartoonEffect;
+                if (coloured)
+                    cartoonEffect = await RenderCartoonImage(imageStream);
+                else
+                    cartoonEffect = await RenderSketchImage(imageStream);
+
                 await RenderFinalImage(sketchEffect, cartoonEffect);
 
                 CartoonDisplay.Source = _finalImageBitmap;
@@ -269,25 +271,34 @@ namespace Toonify
             await finalRenderer.RenderAsync();
         }
 
+        private async System.Threading.Tasks.Task<FilterEffect> RenderInkedImage(StreamImageSource imageStream)
+        {
+            var sketchFilter = new StampFilter(5, 0.3);
+            var effect = new FilterEffect(imageStream);
+            effect.Filters = new[] { sketchFilter };
+            var renderer = new WriteableBitmapRenderer(effect, _sketchImageBitmap);
+            await renderer.RenderAsync();
+            return effect;
+        }
+
         private async System.Threading.Tasks.Task<FilterEffect> RenderSketchImage(StreamImageSource imageStream)
         {
-            //var sketchFilter = new SketchFilter(SketchMode.Gray);
-            var sketchFilter = new StampFilter(5, 0.3);
-            var sketchEffect = new FilterEffect(imageStream);
-            sketchEffect.Filters = new[] { sketchFilter };
-            var sketchRenderer = new WriteableBitmapRenderer(sketchEffect, _sketchImageBitmap);
-            await sketchRenderer.RenderAsync();
-            return sketchEffect;
+            var sketchFilter = new SketchFilter(SketchMode.Gray);
+            var effect = new FilterEffect(imageStream);
+            effect.Filters = new[] { sketchFilter };
+            var renderer = new WriteableBitmapRenderer(effect, _cartoonImageBitmap);
+            await renderer.RenderAsync();
+            return effect;
         }
 
         private async System.Threading.Tasks.Task<FilterEffect> RenderCartoonImage(StreamImageSource imageStream)
         {
-            var cartoonEffect = new FilterEffect(imageStream);
             var cartoonFilter = new CartoonFilter();
-            cartoonEffect.Filters = new[] { cartoonFilter };
-            var cartoonRenderer = new WriteableBitmapRenderer(cartoonEffect, _cartoonImageBitmap);
-            await cartoonRenderer.RenderAsync();
-            return cartoonEffect; 
+            var effect = new FilterEffect(imageStream);
+            effect.Filters = new[] { cartoonFilter };
+            var renderer = new WriteableBitmapRenderer(effect, _cartoonImageBitmap);
+            await renderer.RenderAsync();
+            return effect; 
         }
 
         private void NavigateBackToHomeScreen()
@@ -322,14 +333,16 @@ namespace Toonify
             NavigateBackToHomeScreen();
         }
 
-        //private void EffectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (_pageLoaded)
-        //    {
-        //        LoadingPanel.Visibility = System.Windows.Visibility.Visible;
-        //        ConvertAndDisplayImage();
-        //    }
-        //}
+        private void EffectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_pageLoaded)
+            {
+                LoadingPanel.Visibility = System.Windows.Visibility.Visible;
+                ConvertAndDisplayImage();
+                _settings["EffectListIndex"] = EffectList.SelectedIndex;
+                _settings.Save();
+            }
+        }
 
         private void SaveImage(WriteableBitmap bitmap)
         {

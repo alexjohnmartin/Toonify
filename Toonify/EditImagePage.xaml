@@ -25,11 +25,10 @@
         <StackPanel Grid.Row="0" Margin="12,17,0,0">
             <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
                        Style="{StaticResource PhoneTextNormalStyle}"/>
-            <!--<toolkit:ListPicker Name="EffectList" SelectionChanged="EffectList_SelectionChanged">
-                <toolkit:ListPickerItem Content="cartoon effect" Name="CartoonItem"/>
-                <toolkit:ListPickerItem Content="inked effect" Name="InkedItem"/>
-                <toolkit:ListPickerItem Content="combined effect" Name="CombinedItem"/>
-            </toolkit:ListPicker>-->
+            <toolkit:ListPicker Name="EffectList" SelectionChanged="EffectList_SelectionChanged">
+                <toolkit:ListPickerItem Content="coloured" Name="ColouredItem"/>
+                <toolkit:ListPickerItem Content="black and white" Name="BlackAndWhiteItem"/>
+            </toolkit:ListPicker>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
