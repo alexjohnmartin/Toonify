@@ -530,10 +530,10 @@ namespace Toonify
             var centreY = DefaultHeight / 2;
             var halfMargin = DefaultPageMargin / 2;
             _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, centreX - halfMargin, centreY - halfMargin, Colors.Black);
-            _pageImage.DrawRectangle(centreX + halfMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, centreY - halfMargin, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, centreY + halfMargin, centreX - halfMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
-            _pageImage.DrawRectangle(centreX + halfMargin, centreY + halfMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, DefaultPageMargin+5, centreX - halfMargin - 5, centreY - halfMargin - 5, Colors.Black);
+            _pageImage.DrawRectangle(centreX + halfMargin + 5, DefaultPageMargin+5, DefaultWidth - DefaultPageMargin - 5, centreY - halfMargin - 5, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, centreY + halfMargin + 5, centreX - halfMargin - 5, DefaultHeight - DefaultPageMargin - 5, Colors.Black);
+            _pageImage.DrawRectangle(centreX + halfMargin + 5, centreY + halfMargin + 5, DefaultWidth - DefaultPageMargin - 5, DefaultHeight - DefaultPageMargin - 5, Colors.Black);
             DrawAddIcon(DefaultWidth / 4, DefaultHeight / 4);
             DrawAddIcon(DefaultWidth / 4 * 3, DefaultHeight / 4);
             DrawAddIcon(DefaultWidth / 4, DefaultHeight / 4 * 3);
@@ -546,9 +546,9 @@ namespace Toonify
             var centreX = DefaultWidth / 2;
             var thirdHeight = DefaultHeight / 3;
             _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, thirdHeight - DefaultPageMargin / 2, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - thirdHeight - DefaultPageMargin / 2, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - thirdHeight + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, DefaultPageMargin+5, DefaultWidth - DefaultPageMargin - 5, thirdHeight - DefaultPageMargin / 2 - 5, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, thirdHeight + DefaultPageMargin / 2 + 5, DefaultWidth - DefaultPageMargin - 5, DefaultHeight - thirdHeight - DefaultPageMargin / 2 - 5, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, DefaultHeight - thirdHeight + DefaultPageMargin / 2 + 5, DefaultWidth - DefaultPageMargin - 5, DefaultHeight - DefaultPageMargin - 5, Colors.Black);
             DrawAddIcon(centreX, thirdHeight / 2);
             DrawAddIcon(centreX, thirdHeight + (thirdHeight / 2));
             DrawAddIcon(centreX, thirdHeight * 2 + (thirdHeight / 2));
@@ -560,8 +560,8 @@ namespace Toonify
             var centreX = DefaultWidth / 2;
             var centreY = DefaultHeight / 2;
             _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - centreY - DefaultPageMargin / 2, Colors.Black);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultHeight - centreY + DefaultPageMargin / 2, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, DefaultPageMargin+5, DefaultWidth - DefaultPageMargin - 5, DefaultHeight - centreY - DefaultPageMargin / 2 - 5, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, DefaultHeight - centreY + DefaultPageMargin / 2 + 5, DefaultWidth - DefaultPageMargin - 5, DefaultHeight - DefaultPageMargin - 5, Colors.Black);
             DrawAddIcon(centreX, centreY / 2);
             DrawAddIcon(centreX, centreY / 2 + centreY);
         }
@@ -572,7 +572,7 @@ namespace Toonify
             var centreX = DefaultWidth / 2;
             var centreY = DefaultHeight / 2;
             _pageImage.FillRectangle(0, 0, DefaultWidth, DefaultHeight, Colors.White);
-            _pageImage.DrawRectangle(DefaultPageMargin, DefaultPageMargin, DefaultWidth - DefaultPageMargin, DefaultHeight - DefaultPageMargin, Colors.Black);
+            _pageImage.DrawRectangle(DefaultPageMargin+5, DefaultPageMargin+5, DefaultWidth - DefaultPageMargin - 5, DefaultHeight - DefaultPageMargin - 5, Colors.Black);
             DrawAddIcon(centreX, centreY);
         }
 
@@ -604,7 +604,7 @@ namespace Toonify
             _pageImage.FillEllipseCentered(centreX, centreY, (bubbleWidth / 2) - 2, (bubbleHeight / 2) - 2, Colors.White);
             _pageImage.Invalidate();
 
-            _pageImage.DrawText(SpeechBubbleTextbox.Text, Colors.Black, DefaultFontsize, centreX - (TextWidth(SpeechBubbleTextbox.Text) / 2), (int)(centreY - DefaultFontsize * zoom / 2));
+            _pageImage.DrawText(SpeechBubbleTextbox.Text.Trim(), Colors.Black, DefaultFontsize, centreX - (TextWidth(SpeechBubbleTextbox.Text) / 2), (int)(centreY - DefaultFontsize * zoom / 2));
             _pageImage.Invalidate();
         }
 

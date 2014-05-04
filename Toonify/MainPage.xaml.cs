@@ -116,13 +116,13 @@ namespace Toonify
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var image = (Image)e.OriginalSource;
+            var image = (FrameworkElement)e.OriginalSource;
             NavigationService.Navigate(new Uri("/ViewImagePage.xaml?name=" + image.Tag, UriKind.Relative));
         }
 
         private void PageImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var image = (Image)e.OriginalSource; 
+            var image = (FrameworkElement)e.OriginalSource; 
             NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + image.Tag, UriKind.Relative));
         }
 
@@ -152,7 +152,7 @@ namespace Toonify
 
         private void UpdateButtonColor()
         {
-            VersionTextBox.Text = XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("Version").Value;
+            VersionTextBox.Text = "v" + XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("Version").Value;
             ReviewButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
             EmailButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);
             StoreButton.Background = new SolidColorBrush((Color)Application.Current.Resources["PhoneAccentColor"]);

@@ -243,4 +243,7 @@
   <data name="AboutButtonPin" xml:space="preserve">
     <value>Pin to home</value>
   </data>
+  <data name="OtherAppsHeader" xml:space="preserve">
+    <value>Other apps</value>
+  </data>
 </root>

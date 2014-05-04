@@ -268,6 +268,15 @@ namespace Toonify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Other apps.
+        /// </summary>
+        public static string OtherAppsHeader {
+            get {
+                return ResourceManager.GetString("OtherAppsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Out of memory, your device may not be powerful enough.
         /// </summary>
         public static string OutOfMemoryError {

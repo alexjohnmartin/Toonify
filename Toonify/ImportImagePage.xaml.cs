@@ -17,13 +17,19 @@ using BugSense;
 
 namespace Toonify
 {
+    public class ImageItemPair
+    {
+        public ImageItem Item1 { get; set; }
+        public ImageItem Item2 { get; set; }
+    }
+
     public partial class ImportImagePage : PhoneApplicationPage
     {
         private const int MaxImages = 100;
         private List<BitmapImage> lstBitmapImage;
 
-        private ObservableCollection<ImageItem> _listOfImages = new ObservableCollection<ImageItem>();
-        public ObservableCollection<ImageItem> ListOfImages
+        private ObservableCollection<ImageItemPair> _listOfImages = new ObservableCollection<ImageItemPair>();
+        public ObservableCollection<ImageItemPair> ListOfImages
         {
             get { return _listOfImages; }
             set { _listOfImages = value; }
@@ -46,9 +52,9 @@ namespace Toonify
         private void LoadImagesFromMediaLibrary()
         {
             BugSenseHandler.Instance.LeaveBreadCrumb("ImportImagePage - load images from library");
-            //_listOfImages = new ObservableCollection<ImageItem>(); 
             try
             {
+                var pair = new ImageItemPair();
                 foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
                 {
                     if (source.MediaSourceType == MediaSourceType.LocalDevice)
@@ -64,10 +70,21 @@ namespace Toonify
                                     BitmapImage b = new BitmapImage();
                                     b.SetSource(p.GetThumbnail());
                                     var wb = new WriteableBitmap(b);
-                                    ListOfImages.Add(new ImageItem { Image = wb, Name = p.Name });
+                                    var item = new ImageItem { Image = wb, Name = p.Name };
+                                    if (pair.Item1 == null)
+                                        pair.Item1 = item;
+                                    else if (pair.Item2 == null)
+                                        pair.Item2 = item;
+
+                                    if (pair.Item1 != null && pair.Item2 != null)
+                                    {
+                                        _listOfImages.Add(pair);
+                                        pair = new ImageItemPair();
+                                    }
                                 }
                             }
                         }
+                        if (pair.Item1 != null) _listOfImages.Add(pair);
                     }
                 }
             }

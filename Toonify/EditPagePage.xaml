@@ -19,21 +19,21 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="12,17,0,12">
+        <StackPanel Grid.Row="0" Margin="12,17,0,0">
             <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
                        Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Grid x:Name="PageLayoutPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Grid x:Name="PageLayoutPanel" Grid.Row="1" Margin="0,0,0,0" Visibility="Visible">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="80"/>
-                    <RowDefinition Height="200"/>
-                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="300"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="220"/>
-                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding Path=LocalizedResources.SelectLayoutTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>
@@ -54,25 +54,25 @@
 
             <StackPanel Visibility="Collapsed" Grid.Row="1" Margin="12,0,12,0" Name="PagePanel">
                 <!--<TextBlock Name="TitleText" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Grid.Row="0" Grid.ColumnSpan="2"/>-->
-                <Grid>
+                <Grid Margin="0,-12,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220"/>
-                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="AddImageButton" Grid.Row="0" Grid.Column="0" IsEnabled="False" Click="AddImage_Click">
+                    <Button Name="AddImageButton" Grid.Row="0" Grid.Column="0" IsEnabled="False" Click="AddImage_Click" Margin="-12,0,0,0">
                         <TextBlock Text="{Binding Path=LocalizedResources.AddImageMode, Source={StaticResource LocalizedStrings}}"/>
                     </Button>
-                    <Button Name="AddSpeechButton" Grid.Row="0" Grid.Column="1" Click="AddSpeech_Click">
+                    <Button Name="AddSpeechButton" Grid.Row="0" Grid.Column="1" Click="AddSpeech_Click" Margin="0,0,-12,0">
                         <TextBlock Text="{Binding Path=LocalizedResources.AddSpeechMode, Source={StaticResource LocalizedStrings}}"/>
                     </Button>
                 </Grid>
-                
-                <Image Name="PageImage" Tap="PageImage_Tap" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                <Image Name="PageImage" Tap="PageImage_Tap" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0"/>
             </StackPanel>
             
             <Grid Name="TextDialog" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Visibility="Collapsed" Margin="0, 100, 0, 0">

@@ -27,18 +27,18 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="20,0,20,0">
             <ScrollViewer>
                 <phone:LongListSelector Margin="0,0,0,20" ItemsSource="{Binding ImageItemPairs}">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="215"/>
-                                    <ColumnDefinition Width="215"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="215"/>
+                                    <RowDefinition Height="200"/>
                                 </Grid.RowDefinitions>
 
                                 <Rectangle Fill="{Binding Item1BackgroundColor}" Height="200" Width="200" Grid.Column="0" Grid.Row="0"/>

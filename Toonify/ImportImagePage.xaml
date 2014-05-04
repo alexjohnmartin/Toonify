@@ -21,21 +21,26 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="{Binding Path=LocalizedResources.ImportImageTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        <StackPanel Grid.Row="0" Margin="12,17,0,12">
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Margin="12,0,0,0" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.ImportImageTitle, Source={StaticResource LocalizedStrings}}" Margin="12,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="20,0,20,0">
             <phone:LongListSelector ItemsSource="{Binding ListOfImages}">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <Button CommandParameter="{Binding Name}"
+                        <StackPanel Orientation="Horizontal">
+                            <Button CommandParameter="{Binding Item1.Name}"
                                     Click="Button_Click">
                                 <Image Width="150" Height="150" 
-                                    Source="{Binding Image}"/>
+                                    Source="{Binding Item1.Image}"/>
+                            </Button>
+                            <Button CommandParameter="{Binding Item2.Name}"
+                                    Click="Button_Click">
+                                <Image Width="150" Height="150" 
+                                    Source="{Binding Item2.Image}"/>
                             </Button>
                         </StackPanel>
                     </DataTemplate>
