@@ -11,6 +11,7 @@ using Microsoft.Phone.Tasks;
 using System.Windows.Media;
 using System.Xml.Linq;
 using BugSense;
+using RateMyApp.Helpers;
 
 namespace Toonify
 {
@@ -18,18 +19,13 @@ namespace Toonify
     {
         CameraCaptureTask cameraCaptureTask = new CameraCaptureTask();
 
-        // Constructor
         public MainPage()
         {
             InitializeComponent();
-
-            // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
-
             cameraCaptureTask.Completed += new EventHandler<PhotoResult>(cameraCaptureTask_Completed);
         }
 
-        // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - navigated to");
@@ -94,7 +90,7 @@ namespace Toonify
         public void ReviewButton_Click(object sender, EventArgs e)
         {
             BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - review");
-            //FeedbackHelper.Default.Reviewed();
+            FeedbackHelper.Default.Reviewed();
             var marketplace = new MarketplaceReviewTask();
             marketplace.Show();
         }
@@ -107,12 +103,6 @@ namespace Toonify
             email.Subject = "Feedback for the Calendar Tile application";
             email.Show();
         }
-
-        //private void PageButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var button = (Button)e.OriginalSource; 
-        //    NavigationService.Navigate(new Uri("/EditPagePage.xaml?edit=" + button.CommandParameter, UriKind.Relative));
-        //}
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
@@ -195,8 +185,7 @@ namespace Toonify
         {
             BugSenseHandler.Instance.LeaveBreadCrumb("MainPage - pin to home screen");
             var tile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains("MainPage.xaml"));
-            if (tile == null)
-                ShellTile.Create(new Uri("/MainPage.xaml?test=true", UriKind.Relative), GetTileData(), true);
+            if (tile == null) ShellTile.Create(new Uri("/MainPage.xaml?test=true", UriKind.Relative), GetTileData(), true);
         }
 
         private ShellTileData GetTileData()
